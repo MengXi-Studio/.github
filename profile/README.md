@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://avatars.githubusercontent.com/u/221147889?v=4" width="180" alt="MengXi-Studio">
+  <img src="../images/logo.png" width="180" alt="MengXi-Studio">
 </p>
 
 <p align="center">
@@ -11,6 +11,9 @@
   </a>
   <a href="https://doc.dcloud.net.cn/uni-app-x/">
     <img src="https://img.shields.io/badge/uni--app%20x-官网-2b9939?style=for-the-badge" alt="uni-app x">
+  </a>
+  <a href="https://www.npmjs.com/org/meng-xi">
+    <img src="https://img.shields.io/badge/NPM-组织-2b9939?style=for-the-badge&logo=npm" alt="NPM">
   </a>
 </p>
 
