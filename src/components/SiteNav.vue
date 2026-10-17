@@ -1,11 +1,23 @@
 <script setup lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { asset } from '@/utils/assets'
 import { GithubIcon } from './icons'
+
+const scrolled = ref(false)
+const onScroll = (): void => {
+  scrolled.value = window.scrollY > 8
+}
+
+onMounted(() => {
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+onUnmounted(() => window.removeEventListener('scroll', onScroll))
 </script>
 
 <template>
-  <header class="site-nav">
+  <header class="site-nav" :class="{ scrolled }">
     <div class="site-nav-inner">
       <RouterLink to="/" class="nav-brand">
         <img :src="asset('images/logo.png')" alt="MengXi-Studio" />

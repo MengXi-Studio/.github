@@ -89,8 +89,12 @@ const aboutCards = [
   <main>
     <!-- Hero -->
     <section class="hero">
+      <div class="hero-glow hero-glow-green" aria-hidden="true" />
+      <div class="hero-glow hero-glow-cyan" aria-hidden="true" />
       <div class="container">
-        <img class="hero-logo fade-up" :src="asset('images/logo.png')" alt="MengXi-Studio" />
+        <div class="fade-up">
+          <img class="hero-logo" :src="asset('images/logo.png')" alt="MengXi-Studio" />
+        </div>
         <h1 class="hero-title fade-up fade-up-delay-1">
           让「一套代码，多端运行」<br />
           <span class="gradient-text">更简单、更高效</span>
@@ -120,21 +124,21 @@ const aboutCards = [
 
     <!-- 数据带 -->
     <section class="container">
-      <div class="stats-band">
+      <div class="stats-band" v-reveal.stagger>
         <div class="stat-card">
-          <div class="stat-value">{{ projects.length }}</div>
+          <div class="stat-value" v-count-up>{{ projects.length }}</div>
           <div class="stat-label">开源项目</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value">{{ npmCount }}</div>
+          <div class="stat-value" v-count-up>{{ npmCount }}</div>
           <div class="stat-label">npm 包</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value">{{ displayDownloads }}+</div>
+          <div class="stat-value" v-count-up>{{ displayDownloads }}+</div>
           <div class="stat-label">npm 月下载</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value">{{ docSites }}</div>
+          <div class="stat-value" v-count-up>{{ docSites }}</div>
           <div class="stat-label">在线文档站</div>
         </div>
       </div>
@@ -143,13 +147,13 @@ const aboutCards = [
     <!-- 项目一览 -->
     <section id="projects" class="section">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head" v-reveal>
           <span class="kicker">Projects</span>
           <h2 class="section-title">生态总览</h2>
           <p class="section-desc">按平台浏览我们的开源项目，覆盖 uni-app 与 uni-app x 双端开发全链路。</p>
         </div>
 
-        <div class="platform-tabs" role="tablist">
+        <div class="platform-tabs" role="tablist" v-reveal>
           <button
             v-for="t in tabs"
             :key="t"
@@ -163,23 +167,28 @@ const aboutCards = [
           </button>
         </div>
 
-        <div class="project-grid">
-          <ProjectCard v-for="p in filtered" :key="p.slug" :project="p" />
-        </div>
+        <TransitionGroup name="grid" tag="div" class="project-grid" v-reveal.stagger>
+          <ProjectCard
+            v-for="(p, i) in filtered"
+            :key="p.slug"
+            :project="p"
+            :style="{ '--i': i }"
+          />
+        </TransitionGroup>
       </div>
     </section>
 
     <!-- 组织介绍 -->
     <section id="about" class="section">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head" v-reveal>
           <span class="kicker">About Us</span>
           <h2 class="section-title">关于 MengXi-Studio</h2>
           <p class="section-desc">
             我们相信优秀的工程化工具能大幅提升开发体验，因此持续投入于跨端开发的基础设施建设。
           </p>
         </div>
-        <div class="about-grid">
+        <div class="about-grid" v-reveal.stagger>
           <div v-for="c in aboutCards" :key="c.title" class="glass-card about-card">
             <div class="about-icon">{{ c.icon }}</div>
             <h3>{{ c.title }}</h3>
@@ -192,14 +201,14 @@ const aboutCards = [
     <!-- 社区 -->
     <section id="community" class="section">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head" v-reveal>
           <span class="kicker">Community</span>
           <h2 class="section-title">加入社区</h2>
           <p class="section-desc">
             欢迎有意愿改善 uni-app 生态开发体验的朋友加入，让我们一起把 uni-app 系列产品变得更好。❤
           </p>
         </div>
-        <div class="community-grid">
+        <div class="community-grid" v-reveal.stagger>
           <div v-for="c in community" :key="c.img" class="glass-card community-card">
             <img :src="asset(c.img)" :alt="c.title" loading="lazy" />
             <h4>{{ c.title }}</h4>

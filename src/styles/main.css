@@ -189,6 +189,8 @@ button {
    -------------------------------------------------------------------------- */
 
 .btn {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -250,6 +252,14 @@ button {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.site-nav.scrolled {
+  background: rgba(10, 14, 19, 0.9);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
 .site-nav-inner {
@@ -335,6 +345,7 @@ button {
   padding: calc(var(--nav-height) + 96px) 0 72px;
   text-align: center;
   position: relative;
+  overflow: hidden;
 }
 
 .hero-logo {
@@ -345,6 +356,7 @@ button {
   box-shadow:
     0 0 0 1px var(--border-strong),
     0 12px 48px rgba(74, 222, 128, 0.22);
+  animation: logo-float 6s ease-in-out infinite;
 }
 
 .hero-title {
@@ -1219,4 +1231,225 @@ button {
   .hero {
     padding-top: calc(var(--nav-height) + 64px);
   }
+}
+
+/* --------------------------------------------------------------------------
+   动效扩展
+   -------------------------------------------------------------------------- */
+
+@property --card-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* 滚动显现（由 v-reveal 指令驱动，动画结束后自动移除类，不影响 hover 过渡） */
+.reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-y, 24px));
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 页面切换（App.vue 路由过渡） */
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* 平台 Tab 切换：卡片交错入场（TransitionGroup） */
+.grid-enter-active {
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 45ms);
+}
+
+.grid-enter-from {
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+}
+
+.grid-leave-active {
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.grid-leave-to {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+.grid-move {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hero 光晕漂移 */
+.hero-glow {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-glow-green {
+  width: 480px;
+  height: 480px;
+  top: -140px;
+  left: 50%;
+  margin-left: -560px;
+  background: radial-gradient(circle, rgba(74, 222, 128, 0.32), transparent 65%);
+  animation: blob-drift 18s ease-in-out infinite alternate;
+}
+
+.hero-glow-cyan {
+  width: 520px;
+  height: 520px;
+  top: -100px;
+  right: 50%;
+  margin-right: -580px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.28), transparent 65%);
+  animation: blob-drift 23s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes blob-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(48px, 28px) scale(1.1);
+  }
+  100% {
+    transform: translate(-36px, -18px) scale(0.94);
+  }
+}
+
+/* Hero 标题渐变流动 */
+.hero-title .gradient-text {
+  background-size: 200% auto;
+  animation: gradient-shift 5s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+}
+
+/* Logo 悬浮呼吸 */
+@keyframes logo-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 玻璃卡片悬停旋转渐变描边 */
+.glass-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--card-angle),
+    transparent 0deg,
+    transparent 280deg,
+    rgba(74, 222, 128, 0.85) 325deg,
+    rgba(34, 211, 238, 0.85) 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.glass-card:hover::after {
+  opacity: 1;
+  animation: card-border-spin 2.8s linear infinite;
+}
+
+@keyframes card-border-spin {
+  to {
+    --card-angle: 360deg;
+  }
+}
+
+/* 按钮高光扫过 */
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
+
+.btn:hover::after {
+  left: 135%;
+}
+
+/* 二维码图片悬停轻微放大 */
+.community-card img {
+  transition: transform 0.3s ease;
+}
+
+.community-card:hover img {
+  transform: scale(1.04);
+}
+
+/* 复制按钮按压反馈 */
+.copy-btn {
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.15s ease;
+}
+
+.copy-btn:active {
+  transform: scale(0.94);
 }

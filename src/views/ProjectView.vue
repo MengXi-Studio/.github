@@ -82,9 +82,9 @@ const displayNpm = computed(() => {
       </header>
 
       <!-- 功能特性 -->
-      <section class="detail-section">
+      <section class="detail-section" v-reveal>
         <h2 class="detail-section-title">功能特性</h2>
-        <div class="feature-list">
+        <div class="feature-list" v-reveal.stagger>
           <div v-for="f in project.features" :key="f" class="glass-card feature-item">
             <span class="check"><CheckIcon /></span>
             <p>{{ f }}</p>
@@ -93,7 +93,7 @@ const displayNpm = computed(() => {
       </section>
 
       <!-- 快速开始 -->
-      <section class="detail-section">
+      <section class="detail-section" v-reveal>
         <h2 class="detail-section-title">快速开始</h2>
         <template v-if="project.install">
           <CopyBlock :command="project.install" :title="project.npm?.pkg" />
@@ -112,7 +112,7 @@ const displayNpm = computed(() => {
       </section>
 
       <!-- 适用场景 -->
-      <section class="detail-section">
+      <section class="detail-section" v-reveal>
         <h2 class="detail-section-title">适用场景</h2>
         <div class="scene-list">
           <div v-for="u in project.useCases" :key="u" class="glass-card scene-item">
@@ -123,7 +123,7 @@ const displayNpm = computed(() => {
       </section>
 
       <!-- 版本信息 -->
-      <section class="detail-section">
+      <section class="detail-section" v-reveal>
         <h2 class="detail-section-title">版本信息</h2>
         <div class="meta-grid">
           <template v-if="project.npm && displayNpm">
@@ -164,7 +164,7 @@ const displayNpm = computed(() => {
       </section>
 
       <!-- 链接 -->
-      <section class="detail-section">
+      <section class="detail-section" v-reveal>
         <h2 class="detail-section-title">相关链接</h2>
         <div class="link-grid">
           <a class="glass-card link-card" :href="project.repo" target="_blank" rel="noopener noreferrer">
@@ -216,7 +216,7 @@ const displayNpm = computed(() => {
       </section>
 
       <!-- 相关项目 -->
-      <section v-if="related.length" class="detail-section">
+      <section v-if="related.length" class="detail-section" v-reveal>
         <h2 class="detail-section-title">相关项目</h2>
         <div class="related-grid">
           <ProjectCard v-for="p in related" :key="p.slug" :project="p" />
