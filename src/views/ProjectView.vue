@@ -35,8 +35,6 @@ const starBadge = computed(
 <template>
   <main v-if="project" class="detail-page">
     <div class="container">
-      <RouterLink to="/" class="breadcrumb">← 返回首页</RouterLink>
-
       <!-- 项目头 -->
       <header class="detail-header fade-up">
         <div class="detail-title-row">

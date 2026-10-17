@@ -684,20 +684,6 @@ button {
   padding: calc(var(--nav-height) + 48px) 0 72px;
 }
 
-.breadcrumb {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--text-muted);
-  font-size: 14px;
-  margin-bottom: 32px;
-  transition: color 0.2s;
-}
-
-.breadcrumb:hover {
-  color: var(--green);
-}
-
 .detail-header {
   margin-bottom: 40px;
 }

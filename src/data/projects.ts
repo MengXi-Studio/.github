@@ -184,24 +184,65 @@ request<UTSJSONObject>({ url: '/api/get', method: 'GET', params: { page: 1 } })
       'axios 心智的 uni-app x 本地缓存库（UTS 编写），底层唯一依赖 uni.setStorage 系列原生 API，不重造存储栈。多实例、统一错误结构、三级配置合并心智完全对齐 axios；TTL 过期、key 前缀命名空间、未命中转译等由库内确定性实现抹平，一套 API 多端覆盖。',
     features: [
       'axios 心智开箱即用：set / get / remove / clear / info / keys / clearExpired 七个顶层函数默认实例即用；createStorage 多实例隔离，configureStorage 配置全局默认',
-      'TTL 过期管理：set(key, data, ttl) 毫秒级过期；读取惰性判断（过期即移除）；clearExpired() 全量扫描返回清理条数；三级回退（调用级 ttl → 实例 defaultTTL → 永不过期）',
-      'key 前缀命名空间：默认前缀 mx_storage:；keys() 剥前缀返回原始 key；clear() 仅清理本命名空间，规避 uni- / dcloud_ 平台保留前缀',
-      '未命中不是错误：原生 data not found fail 在 adapter 层统一转译为 resolve(null)，业务侧只判空',
-      '统一可预测的错误结构：StorageError（ERR_PARAM / ERR_NATIVE），原生 errCode 经 nativeErrCode 原值透传，errSubject 多库混用可过滤来源',
-      '兼容存量数据与类型还原：读到非本库格式数据按「无过期」原样返回；get<T> 泛型静态标注，type 对象经 JSON.parse<T> 官方路径还原',
+      'TTL 过期管理：set(key, data, ttl) 毫秒级过期；读取惰性判断（过期即移除）；clearExpired() 全量扫描返回清理条数；三级回退（调用级 ttl → 实例 defaultTTL → 内置永不过期）',
+      'key 前缀命名空间：默认前缀 mx_storage:；keys() 剥前缀返回原始 key；clear() 仅清理本命名空间；非法保留前缀操作期 ERR_PARAM 拦截',
+      '未命中不是错误：原生 data not found fail 在 adapter 层统一转译为 resolve(null)，业务侧只判空，调用点不再逐个兜 fail',
+      '统一可预测的错误结构：StorageError（ERR_PARAM / ERR_NATIVE），原生 errCode 经 nativeErrCode 原值透传，errSubject 多库混用可过滤来源，key 挂载关联业务 key',
+      '兼容存量数据：读到非本库格式的数据按「无过期」原样返回，不报错不误删，渐进迁移无负担',
+      '泛型与类型还原：get<T> 泛型静态标注；type 对象读回 UTSJSONObject，统一 JSON.parse<T>(JSON.stringify(raw)) 官方路径还原',
+      '强类型 UTS：配置字段 | null 空安全兜底，错误码字面量联合类型；全端同构无平台目录端，一套源码走遍 uni-app x',
     ],
     install: 'npm install @meng-xi/unix-storage',
     installNote:
       '使用前将包内容同步到工程 uni_modules/ux-storage/（编译器不扫描 node_modules）：mkdir -p uni_modules && cp -R node_modules/@meng-xi/unix-storage uni_modules/ux-storage，业务侧从 @/uni_modules/ux-storage 导入。',
-    usage: `import { set, get, configureStorage } from '@/uni_modules/ux-storage'
+    usage: `// ─── 默认实例开箱即用 ────────────────────────────
+import { set, get, configureStorage } from '@/uni_modules/ux-storage'
+import type { StorageDefaults } from '@/uni_modules/ux-storage'
 
-configureStorage({ defaultTTL: null } as StorageDefaults)
+// 项目启动时配置一次全局默认（如 App.uvue onLaunch；null 表示沿用内置默认）
+configureStorage({
+  keyPrefix: null, // null 沿用内置默认 'mx_storage:'
+  defaultTTL: null, // null 永不过期
+} as StorageDefaults)
 
-// TTL 1 小时；null = 永不过期
+// TTL 1 小时；null = 永不过期（或沿用实例 defaultTTL）
 await set('token', { value: 'xxx' } as TokenInfo, 3600_000)
 
 // 未命中 / 已过期返回 null，不 reject
-const token = await get('token')`,
+const token = await get('token')
+
+// 类型还原（UTSJSONObject 读回，官方路径）
+const restored = JSON.parse<TokenInfo>(JSON.stringify(token))
+
+// ─── TTL 与清理 ─────────────────────────────────
+import { set, get, remove, clearExpired } from '@/uni_modules/ux-storage'
+
+await set('session', data, 60_000) // 60 秒过期
+await get('session') // 过期：惰性移除并返回 null
+
+const count = await clearExpired() // 全量扫描，返回清理条数
+await remove('session') // 移除指定 key
+
+// ─── 命名空间与多实例 ───────────────────────────
+import { keys, clear, createStorage } from '@/uni_modules/ux-storage'
+import type { StorageDefaults } from '@/uni_modules/ux-storage'
+
+await keys() // 本命名空间 key（剥前缀后返回原始 key）
+await clear() // 仅清理本命名空间，不触碰其他数据
+
+// 多实例隔离（前缀 / defaultTTL 独立）
+const cacheStore = createStorage({ keyPrefix: 'api_cache:', defaultTTL: 300_000 } as StorageDefaults)
+await cacheStore.set('user:1', user, null)
+
+// ─── 统一错误处理 ───────────────────────────────
+import { set } from '@/uni_modules/ux-storage'
+import type { StorageError } from '@/uni_modules/ux-storage'
+
+set('', data, null).catch((err) => {
+  const e = err as StorageError
+  // e.code: 'ERR_PARAM'（key 为空 / keyPrefix 保留前缀）| 'ERR_NATIVE'（原生失败）
+  // e.errSubject 固定 'unix-storage'；e.nativeErrCode 原生 errCode 原值透传；e.key 关联业务原始 key
+})`,
     usageLang: 'UTS',
     useCases: [
       '替代手写 uni.setStorage 封装：回调包装、过期轮转、key 防冲突开箱即用',
