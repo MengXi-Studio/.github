@@ -5,8 +5,8 @@ import SiteFooter from '@/components/SiteFooter.vue'
 </script>
 
 <template>
-  <div class="page-backdrop" aria-hidden="true" />
-  <SiteNav />
-  <RouterView />
-  <SiteFooter />
+	<div class="page-backdrop" aria-hidden="true" />
+	<SiteNav />
+	<RouterView />
+	<SiteFooter />
 </template>

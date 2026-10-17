@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { Project } from '@/data/projects'
 import { platformClass, platformLabel } from '@/data/projects'
+import { useLiveStats } from '@/utils/live-stats'
 import { GithubIcon, BookIcon, StarIcon } from './icons'
 
-defineProps<{ project: Project }>()
+const props = defineProps<{ project: Project }>()
+
+const { stars: liveStars } = useLiveStats()
+const displayStars = computed(() => liveStars.value[props.project.slug] ?? props.project.stars)
 </script>
 
 <template>
@@ -23,7 +28,7 @@ defineProps<{ project: Project }>()
     <div class="project-card-foot">
       <span class="project-stars">
         <StarIcon />
-        {{ project.stars }}
+        {{ displayStars }}
       </span>
       <div class="project-links">
         <a

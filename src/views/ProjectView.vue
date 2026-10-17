@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { projects, platformClass, platformLabel } from '@/data/projects'
+import { useLiveStats } from '@/utils/live-stats'
 import ProjectCard from '@/components/ProjectCard.vue'
 import CopyBlock from '@/components/CopyBlock.vue'
 import { GithubIcon, BookIcon, PackageIcon, IssueIcon, CheckIcon, StarIcon } from '@/components/icons'
@@ -30,6 +31,18 @@ const starBadge = computed(
     project.value &&
     `https://img.shields.io/github/stars/MengXi-Studio/${project.value.slug}?style=flat-square&color=2b9939`,
 )
+
+const { versions: liveVersions, downloads: liveDownloads } = useLiveStats()
+
+// 实时 npm 版本 / 下载量，未拉取成功时回退静态值
+const displayNpm = computed(() => {
+  const npm = project.value?.npm
+  if (!npm) return null
+  return {
+    version: liveVersions.value[npm.pkg] ?? npm.version,
+    downloads: liveDownloads.value[npm.pkg] ?? npm.downloads ?? 0,
+  }
+})
 </script>
 
 <template>
@@ -113,7 +126,7 @@ const starBadge = computed(
       <section class="detail-section">
         <h2 class="detail-section-title">版本信息</h2>
         <div class="meta-grid">
-          <template v-if="project.npm">
+          <template v-if="project.npm && displayNpm">
             <div class="glass-card meta-card">
               <div class="meta-label">npm 包</div>
               <div class="meta-value">{{ project.npm.pkg }}</div>
@@ -121,13 +134,13 @@ const starBadge = computed(
             <div class="glass-card meta-card">
               <div class="meta-label">最新版本</div>
               <div class="meta-value">
-                v{{ project.npm.version ?? '—' }}
+                v{{ displayNpm.version ?? '—' }}
                 <small v-if="project.npm.date">发布于 {{ project.npm.date }}</small>
               </div>
             </div>
             <div class="glass-card meta-card">
               <div class="meta-label">月下载</div>
-              <div class="meta-value">{{ project.npm.downloads ?? 0 }}</div>
+              <div class="meta-value">{{ displayNpm.downloads }}</div>
             </div>
           </template>
           <template v-else>

@@ -9,7 +9,21 @@ import {
   docSites,
   type Platform,
 } from '@/data/projects'
+import { useLiveStats } from '@/utils/live-stats'
 import ProjectCard from '@/components/ProjectCard.vue'
+
+const { downloads: liveDownloads } = useLiveStats()
+
+// 所有 npm 包的实时下载量均已拉取成功时展示实时总和，否则回退静态值
+const displayDownloads = computed(() => {
+  const pkgs = projects.filter((p) => p.npm)
+  if (!pkgs.length) return totalDownloads
+  const live = pkgs.reduce<number | null>((sum, p) => {
+    const d = liveDownloads.value[p.npm!.pkg]
+    return d === undefined ? null : (sum ?? 0) + d
+  }, null)
+  return live ?? totalDownloads
+})
 
 type Tab = '全部' | Platform
 const tabs: Tab[] = ['全部', 'uni-app', 'uni-app x', '通用']
@@ -116,7 +130,7 @@ const aboutCards = [
           <div class="stat-label">npm 包</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value">{{ totalDownloads }}+</div>
+          <div class="stat-value">{{ displayDownloads }}+</div>
           <div class="stat-label">npm 月下载</div>
         </div>
         <div class="stat-card">
