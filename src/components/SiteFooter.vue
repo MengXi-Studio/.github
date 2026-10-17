@@ -15,7 +15,7 @@ const docLinks = projects
       <div class="footer-inner">
         <div>
           <div class="footer-brand">
-            <img :src="asset('logo.png')" alt="MengXi-Studio" />
+            <img :src="asset('images/logo.png')" alt="MengXi-Studio" />
             <span>MengXi-Studio</span>
           </div>
           <p class="footer-desc">

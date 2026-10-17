@@ -9,6 +9,22 @@
       name="description"
       content="MengXi-Studio 专注 uni-app / uni-app x 生态，为跨平台开发者打造路由管理、网络请求、UI 组件、脚手架与构建插件等开源工具。"
     />
+    <script>
+      // GitHub Pages SPA 回退：404.html 将未知路径转为 /?/path 重定向至此，
+      // 这里把它恢复为真实路径（详见 https://github.com/rafgraph/spa-github-pages）
+      ;(function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replace(/~and~/g, '&')
+            })
+            .join('?')
+          window.history.replaceState(null, null, '/.github' + decoded + l.hash)
+        }
+      })(window.location)
+    </script>
   </head>
   <body>
     <div id="app"></div>

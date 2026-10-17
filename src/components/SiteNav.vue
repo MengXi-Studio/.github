@@ -8,7 +8,7 @@ import { GithubIcon } from './icons'
   <header class="site-nav">
     <div class="site-nav-inner">
       <RouterLink to="/" class="nav-brand">
-        <img :src="asset('logo.png')" alt="MengXi-Studio" />
+        <img :src="asset('images/logo.png')" alt="MengXi-Studio" />
         <span>MengXi-Studio</span>
       </RouterLink>
 

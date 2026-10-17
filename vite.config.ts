@@ -1,21 +1,11 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { projects } from './src/data/projects'
 
+// https://vite.dev/config/
 export default defineConfig({
+  // GitHub Pages 项目站点子路径：mengxi-studio.github.io/.github/
   base: '/.github/',
-  publicDir: 'images',
   plugins: [vue()],
-  build: {
-    rollupOptions: {
-      input: {
-        index: 'index.html',
-        ...Object.fromEntries(
-          projects.map((p) => [`projects/${p.slug}`, `projects/${p.slug}.html`]),
-        ),
-      },
-    },
-  },
   resolve: {
     alias: {
       '@': '/src',

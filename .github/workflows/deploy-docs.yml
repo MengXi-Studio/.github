@@ -5,13 +5,12 @@ on:
     branches: [master]
     paths:
       - 'src/**'
-      - 'projects/**'
+      - 'public/**'
       - 'index.html'
-      - 'images/**'
       - 'package.json'
       - 'vite.config.ts'
       - 'tsconfig.json'
-      - '.github/workflows/deploy.yml'
+      - '.github/workflows/deploy-docs.yml'
   workflow_dispatch:
 
 permissions:

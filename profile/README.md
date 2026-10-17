@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../images/logo.png" width="180" alt="MengXi-Studio">
+  <img src="../public/images/logo.png" width="180" alt="MengXi-Studio">
 </p>
 
 <p align="center">
@@ -64,7 +64,7 @@ MengXi-Studio 欢迎有意愿改善 uni-app 生态开发体验的朋友加入，
 
 |                         微信总群                         |                        微信公告通知群                        |                    QQ 交流群 560903974                    |                    QQ 交流群 1058502344                    |                           微信公众号                           |
 | :------------------------------------------------------: | :----------------------------------------------------------: | :-------------------------------------------------------: | :--------------------------------------------------------: | :------------------------------------------------------------: |
-| <img src="../images/wechat-group-main.jpg" width="150"/> | <img src="../images/wechat-group-announce.jpg" width="150"/> | <img src="../images/qq-group-560903974.jpg" width="150"/> | <img src="../images/qq-group-1058502344.jpg" width="150"/> | <img src="../images/wechat-official-account.jpg" width="150"/> |
+| <img src="../public/images/wechat-group-main.jpg" width="150"/> | <img src="../public/images/wechat-group-announce.jpg" width="150"/> | <img src="../public/images/qq-group-560903974.jpg" width="150"/> | <img src="../public/images/qq-group-1058502344.jpg" width="150"/> | <img src="../public/images/wechat-official-account.jpg" width="150"/> |
 
 - 通过 [Issue](https://github.com/orgs/MengXi-Studio/issues) 反馈问题或提出建议，提交前请先搜索是否已有相似问题
 - 欢迎提交 Pull Request，请先阅读对应仓库的贡献说明

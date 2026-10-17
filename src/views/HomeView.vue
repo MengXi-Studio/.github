@@ -45,11 +45,11 @@ const badges = [
 ]
 
 const community = [
-  { img: 'wechat-group-main.jpg', title: '微信总群', desc: '开源社区 · 总群' },
-  { img: 'wechat-group-announce.jpg', title: '公告通知群', desc: '版本发布 / 重要通知' },
-  { img: 'qq-group-560903974.jpg', title: 'QQ 交流群', desc: '560903974' },
-  { img: 'qq-group-1058502344.jpg', title: 'QQ 交流群', desc: '1058502344' },
-  { img: 'wechat-official-account.jpg', title: '微信公众号', desc: '关注获取动态' },
+  { img: 'images/wechat-group-main.jpg', title: '微信总群', desc: '开源社区 · 总群' },
+  { img: 'images/wechat-group-announce.jpg', title: '公告通知群', desc: '版本发布 / 重要通知' },
+  { img: 'images/qq-group-560903974.jpg', title: 'QQ 交流群', desc: '560903974' },
+  { img: 'images/qq-group-1058502344.jpg', title: 'QQ 交流群', desc: '1058502344' },
+  { img: 'images/wechat-official-account.jpg', title: '微信公众号', desc: '关注获取动态' },
 ]
 
 const aboutCards = [
@@ -76,7 +76,7 @@ const aboutCards = [
     <!-- Hero -->
     <section class="hero">
       <div class="container">
-        <img class="hero-logo fade-up" :src="asset('logo.png')" alt="MengXi-Studio" />
+        <img class="hero-logo fade-up" :src="asset('images/logo.png')" alt="MengXi-Studio" />
         <h1 class="hero-title fade-up fade-up-delay-1">
           让「一套代码，多端运行」<br />
           <span class="gradient-text">更简单、更高效</span>
