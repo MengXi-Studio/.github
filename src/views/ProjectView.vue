@@ -57,7 +57,7 @@ const displayNpm = computed(() => {
           </span>
         </div>
         <p class="detail-desc">{{ project.description }}</p>
-        <div class="detail-badges">
+        <div class="detail-badges" v-reveal.stagger>
           <img v-if="starBadge" :src="starBadge" alt="stars" />
           <template v-if="npmBadge">
             <a :href="npmBadge.href" target="_blank" rel="noopener noreferrer">
@@ -219,7 +219,7 @@ const displayNpm = computed(() => {
       <section v-if="related.length" class="detail-section" v-reveal>
         <h2 class="detail-section-title">相关项目</h2>
         <div class="related-grid">
-          <ProjectCard v-for="p in related" :key="p.slug" :project="p" />
+          <ProjectCard v-for="p in related" :key="p.slug" v-tilt :project="p" />
         </div>
       </section>
     </div>

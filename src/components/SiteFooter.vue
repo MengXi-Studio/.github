@@ -11,7 +11,7 @@ const docLinks = projects
 
 <template>
   <footer class="site-footer">
-    <div class="container">
+    <div class="container" v-reveal>
       <div class="footer-inner">
         <div>
           <div class="footer-brand">

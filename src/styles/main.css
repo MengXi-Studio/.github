@@ -119,6 +119,7 @@ button {
     linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
   background-size: 56px 56px;
+  background-position: 0 calc(var(--grid-y, 0) * -0.5px);
   mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 30%, transparent 78%);
 }
 
@@ -295,6 +296,7 @@ button {
 }
 
 .nav-link {
+  position: relative;
   padding: 8px 14px;
   border-radius: 8px;
   color: var(--text-muted);
@@ -303,6 +305,26 @@ button {
   transition:
     color 0.2s,
     background 0.2s;
+}
+
+/* 悬停下划线从左向右滑入 */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--gradient);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.25s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
 }
 
 .nav-link:hover,
@@ -1452,4 +1474,84 @@ button {
 
 .copy-btn:active {
   transform: scale(0.94);
+}
+
+/* --------------------------------------------------------------------------
+   动效扩展 · 第二批
+   -------------------------------------------------------------------------- */
+
+/* 顶部滚动进度条 */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  z-index: 101;
+  pointer-events: none;
+}
+
+/* 返回顶部按钮 */
+.back-to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 90;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    visibility 0.25s;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: var(--gradient);
+  border-color: transparent;
+  color: #06130a;
+  box-shadow: 0 8px 24px rgba(74, 222, 128, 0.3);
+}
+
+/* Hero 鼠标聚光灯（光斑位置由 --spot-x / --spot-y 驱动） */
+.hero-spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    560px circle at var(--spot-x, 50%) var(--spot-y, 40%),
+    rgba(74, 222, 128, 0.07),
+    rgba(34, 211, 238, 0.05) 35%,
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.hero:hover .hero-spotlight {
+  opacity: 1;
 }

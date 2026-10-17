@@ -29,6 +29,16 @@ type Tab = '全部' | Platform
 const tabs: Tab[] = ['全部', 'uni-app', 'uni-app x', '通用']
 const active = ref<Tab>('全部')
 
+// Hero 鼠标聚光灯：光斑跟随光标
+const heroEl = ref<HTMLElement>()
+function onHeroMove(e: MouseEvent): void {
+  const el = heroEl.value
+  if (!el) return
+  const r = el.getBoundingClientRect()
+  el.style.setProperty('--spot-x', `${e.clientX - r.left}px`)
+  el.style.setProperty('--spot-y', `${e.clientY - r.top}px`)
+}
+
 const filtered = computed(() =>
   active.value === '全部' ? projects : projects.filter((p) => p.platform === active.value),
 )
@@ -88,9 +98,10 @@ const aboutCards = [
 <template>
   <main>
     <!-- Hero -->
-    <section class="hero">
+    <section class="hero" ref="heroEl" @mousemove="onHeroMove">
       <div class="hero-glow hero-glow-green" aria-hidden="true" />
       <div class="hero-glow hero-glow-cyan" aria-hidden="true" />
+      <div class="hero-spotlight" aria-hidden="true" />
       <div class="container">
         <div class="fade-up">
           <img class="hero-logo" :src="asset('images/logo.png')" alt="MengXi-Studio" />
@@ -171,6 +182,7 @@ const aboutCards = [
           <ProjectCard
             v-for="(p, i) in filtered"
             :key="p.slug"
+            v-tilt
             :project="p"
             :style="{ '--i': i }"
           />
