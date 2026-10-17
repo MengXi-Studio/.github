@@ -176,6 +176,44 @@ request<UTSJSONObject>({ url: '/api/get', method: 'GET', params: { page: 1 } })
     stars: 0,
   },
   {
+    slug: 'unix-storage',
+    name: 'unix-storage',
+    platform: 'uni-app x',
+    tagline: '为 uni-app x 提供功能完善的本地缓存库',
+    description:
+      'axios 心智的 uni-app x 本地缓存库（UTS 编写），底层唯一依赖 uni.setStorage 系列原生 API，不重造存储栈。多实例、统一错误结构、三级配置合并心智完全对齐 axios；TTL 过期、key 前缀命名空间、未命中转译等由库内确定性实现抹平，一套 API 多端覆盖。',
+    features: [
+      'axios 心智开箱即用：set / get / remove / clear / info / keys / clearExpired 七个顶层函数默认实例即用；createStorage 多实例隔离，configureStorage 配置全局默认',
+      'TTL 过期管理：set(key, data, ttl) 毫秒级过期；读取惰性判断（过期即移除）；clearExpired() 全量扫描返回清理条数；三级回退（调用级 ttl → 实例 defaultTTL → 永不过期）',
+      'key 前缀命名空间：默认前缀 mx_storage:；keys() 剥前缀返回原始 key；clear() 仅清理本命名空间，规避 uni- / dcloud_ 平台保留前缀',
+      '未命中不是错误：原生 data not found fail 在 adapter 层统一转译为 resolve(null)，业务侧只判空',
+      '统一可预测的错误结构：StorageError（ERR_PARAM / ERR_NATIVE），原生 errCode 经 nativeErrCode 原值透传，errSubject 多库混用可过滤来源',
+      '兼容存量数据与类型还原：读到非本库格式数据按「无过期」原样返回；get<T> 泛型静态标注，type 对象经 JSON.parse<T> 官方路径还原',
+    ],
+    install: 'npm install @meng-xi/unix-storage',
+    installNote:
+      '使用前将包内容同步到工程 uni_modules/ux-storage/（编译器不扫描 node_modules）：mkdir -p uni_modules && cp -R node_modules/@meng-xi/unix-storage uni_modules/ux-storage，业务侧从 @/uni_modules/ux-storage 导入。',
+    usage: `import { set, get, configureStorage } from '@/uni_modules/ux-storage'
+
+configureStorage({ defaultTTL: null } as StorageDefaults)
+
+// TTL 1 小时；null = 永不过期
+await set('token', { value: 'xxx' } as TokenInfo, 3600_000)
+
+// 未命中 / 已过期返回 null，不 reject
+const token = await get('token')`,
+    usageLang: 'UTS',
+    useCases: [
+      '替代手写 uni.setStorage 封装：回调包装、过期轮转、key 防冲突开箱即用',
+      'token / session 等有时效数据的 TTL 管理与全量清理',
+      '多业务模块间的存储命名空间隔离，clear 不误伤其他业务数据',
+    ],
+    repo: 'https://github.com/MengXi-Studio/unix-storage',
+    docs: 'https://mengxi-studio.github.io/unix-storage/',
+    npm: { pkg: '@meng-xi/unix-storage', version: '0.1.0', date: '2026-10-17', downloads: 0 },
+    stars: 0,
+  },
+  {
     slug: 'uni-ui',
     name: 'uni-ui',
     platform: 'uni-app',

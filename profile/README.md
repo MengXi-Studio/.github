@@ -36,8 +36,9 @@
 
 | 项目                                                          | 简介                                  | 文档                                                      |
 | ------------------------------------------------------------- | ------------------------------------- | --------------------------------------------------------- |
-| [unix-utils](https://github.com/MengXi-Studio/unix-utils)     | 为 uni-app x 提供便利工具的集合       | [在线文档](https://mengxi-studio.github.io/unix-utils/)   |
-| [unix-request](https://github.com/MengXi-Studio/unix-request) | 为 uni-app x 提供功能完善的网络请求库 | [在线文档](https://mengxi-studio.github.io/unix-request/) |
+| [unix-utils](https://github.com/MengXi-Studio/unix-utils)       | 为 uni-app x 提供便利工具的集合       | [在线文档](https://mengxi-studio.github.io/unix-utils/)     |
+| [unix-request](https://github.com/MengXi-Studio/unix-request)   | 为 uni-app x 提供功能完善的网络请求库 | [在线文档](https://mengxi-studio.github.io/unix-request/)   |
+| [unix-storage](https://github.com/MengXi-Studio/unix-storage)   | 为 uni-app x 提供功能完善的本地缓存库 | [在线文档](https://mengxi-studio.github.io/unix-storage/)   |
 
 ### 🎨 UI 组件
 
