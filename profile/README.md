@@ -35,6 +35,12 @@
 | [uni-router](https://github.com/MengXi-Studio/uni-router)   | 为 uni-app 提供类似 vue-router 风格的路由管理系统   | [在线文档](https://mengxi-studio.github.io/uni-router/)  |
 | [unix-router](https://github.com/MengXi-Studio/unix-router) | 为 uni-app x 提供类似 vue-router 风格的路由管理系统 | [在线文档](https://mengxi-studio.github.io/unix-router/) |
 
+### 🗃 状态管理
+
+| 项目                                                        | 简介                                                      | 文档                                                     |
+| ----------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------------------- |
+| [unix-pinia](https://github.com/MengXi-Studio/unix-pinia)   | 为 uni-app x 提供 Pinia 风格的状态管理库                  | [在线文档](https://mengxi-studio.github.io/unix-pinia/)   |
+
 ### 🧰 工具库
 
 | 项目                                                          | 简介                                  | 文档                                                      |

@@ -81,8 +81,8 @@ router.beforeEach((to, from) => {
     ],
     repo: 'https://github.com/MengXi-Studio/uni-router',
     docs: 'https://mengxi-studio.github.io/uni-router/',
-    npm: { pkg: '@meng-xi/uni-router', version: '2.7.1', date: '2026-08-31', downloads: 213 },
-    stars: 10,
+    npm: { pkg: '@meng-xi/uni-router', version: '2.7.1', date: '2026-08-31', downloads: 160 },
+    stars: 11,
   },
   {
     slug: 'unix-router',
@@ -112,7 +112,7 @@ await router.back(2) // 返回两级`,
     ],
     repo: 'https://github.com/MengXi-Studio/unix-router',
     docs: 'https://mengxi-studio.github.io/unix-router/',
-    npm: { pkg: '@meng-xi/unix-router', version: '0.8.0', date: '2026-09-27', downloads: 1153 },
+    npm: { pkg: '@meng-xi/unix-router', version: '0.8.0', date: '2026-09-27', downloads: 799 },
     stars: 3,
   },
   {
@@ -140,7 +140,7 @@ showToast({ title: '保存成功', icon: 'success', duration: 2000 })`,
     useCases: ['uni-app x 项目统一各端 Toast 行为与降级策略'],
     repo: 'https://github.com/MengXi-Studio/unix-utils',
     docs: 'https://mengxi-studio.github.io/unix-utils/',
-    npm: { pkg: '@meng-xi/unix-utils', version: '0.1.0', date: '2026-10-09', downloads: 175 },
+    npm: { pkg: '@meng-xi/unix-utils', version: '0.1.0', date: '2026-10-09', downloads: 177 },
     stars: 1,
   },
   {
@@ -172,7 +172,7 @@ request<UTSJSONObject>({ url: '/api/get', method: 'GET', params: { page: 1 } })
     ],
     repo: 'https://github.com/MengXi-Studio/unix-request',
     docs: 'https://mengxi-studio.github.io/unix-request/',
-    npm: { pkg: '@meng-xi/unix-request', version: '0.1.0', date: '2026-10-13', downloads: 0 },
+    npm: { pkg: '@meng-xi/unix-request', version: '0.1.0', date: '2026-10-13', downloads: 11 },
     stars: 0,
   },
   {
@@ -255,6 +255,86 @@ set('', data, null).catch((err) => {
     stars: 0,
   },
   {
+    slug: 'unix-pinia',
+    name: 'unix-pinia',
+    platform: 'uni-app x',
+    tagline: '为 uni-app x 提供 Pinia 风格的状态管理库',
+    description:
+      'Pinia 心智的 uni-app x 状态管理库（UTS 编写，setup 式）。uni-app x 的 vdom 模式 App 原生端无法使用标准 Pinia，unix-pinia 把 Pinia 的使用习惯完整搬到 UTS：setup 式 defineStore、storeToRefs、免挂载单例、插件体系，一比一复刻 API 面，裁掉平台不可实现项并给足替代方案，一套 API 多端覆盖。',
+    features: [
+      'setup 式 defineStore：defineStore<T>(id, setup)，state 用 Ref、getter 用 ComputedRef、action 用箭头函数，与 Pinia 官方推荐写法一致',
+      '免挂载单例：模块级注册表保证应用级单例，跨页面共享状态，无需 app.use，纯状态管理零挂载代码',
+      '实例 API 顶层函数映射：patch / dispose / getStoreId 对应 $patch / $dispose / $id（UTS 无 Proxy，无法在 store 对象上挂方法）',
+      '跨 store 依赖：setup 内直接调用对方 useStore，注册表保证单例',
+      '插件体系：pinia.use(plugin) 链式注册，PiniaPluginContext（pinia / store / storeId）对齐标准 Pinia 三字段',
+      '幂等与可预测：同 id 重复 defineStore 警告并返回既有实例；dispose 后 useStore 重建全新实例',
+      '强类型 UTS：全量显式类型标注；Kotlin 泛型擦除边界已在库内收敛，业务侧零感知',
+      '双端实测：Web（JS 编译链）与 Android（Kotlin 编译链、真机）全用例通过，双端行为一致',
+    ],
+    install: 'npm install @meng-xi/unix-pinia',
+    installNote:
+      '使用前将包内容同步到工程 uni_modules/ux-pinia/（编译器不扫描 node_modules）：mkdir -p uni_modules && cp -R node_modules/@meng-xi/unix-pinia uni_modules/ux-pinia，业务侧从 @/uni_modules/ux-pinia 导入；另支持 HBuilderX 插件市场搜索 ux-pinia 导入。',
+    usage: `// ─── 定义 store（stores/counter.uts）────────────
+import type { Ref, ComputedRef } from 'vue'
+import { defineStore } from '@/uni_modules/ux-pinia'
+
+export type CounterStore = {
+  count: Ref<number>,                   // state：Ref
+  doubleCount: ComputedRef<number>,     // getter：ComputedRef
+  increment: () => void,                // action：箭头函数（UTS 函数声明不能作值传递）
+  reset: () => void                     // $reset 的替代：自定义 reset action
+}
+
+export const useCounterStore = defineStore<CounterStore>('counter', (): CounterStore => {
+  const count: Ref<number> = ref(0)
+  const doubleCount: ComputedRef<number> = computed((): number => count.value * 2)
+  const increment = (): void => { count.value++ }
+  const reset = (): void => { count.value = 0 }
+  return { count, doubleCount, increment, reset } as CounterStore
+})
+
+// ─── 页面使用 ───────────────────────────────────
+import { storeToRefs } from '@/uni_modules/ux-pinia'
+import { useCounterStore } from '@/stores/counter.uts'
+
+const store = useCounterStore()                    // 多次调用返回同一实例（跨页面共享）
+const { count, doubleCount } = storeToRefs(store)  // 模板解构自动解包
+
+store.count.value++                                // 脚本访问 state：.value（UTS 无 Proxy 不自动解包）
+
+// ─── 实例 API（$-methods 顶层函数映射）──────────
+import { patch, dispose, getStoreId } from '@/uni_modules/ux-pinia'
+
+// ≙ store.$patch(fn)：批量修改
+patch(store, (s: CounterStore): void => { s.count.value = 10 })
+
+const id: string = getStoreId(store)   // ≙ store.$id → 'counter'
+
+dispose(store)                         // ≙ store.$dispose()：注销后下次 useStore 重建
+
+// ─── 跨 store 与插件 ────────────────────────────
+export const useUserStore = defineStore<UserStore>('user', (): UserStore => {
+  const counterStore = useCounterStore()  // 跨 store 依赖：setup 内直接调用对方 useStore
+  const score: Ref<number> = ref(0)
+  const addScoreFromCount = (): void => { score.value += counterStore.count.value }
+  return { score, addScoreFromCount } as UserStore
+})
+
+// 插件（可选；main.uts 顶层登记）
+import { createPinia, setActivePinia } from '@/uni_modules/ux-pinia'
+setActivePinia(createPinia().use(myPlugin))`,
+    usageLang: 'UTS',
+    useCases: [
+      'uni-app x vdom 模式 App 原生端的状态管理（该端无法使用标准 Pinia）',
+      '跨页面共享的全局状态：登录态、用户信息、主题配置等',
+      '写过 Pinia 的团队零成本迁移状态层范式',
+    ],
+    repo: 'https://github.com/MengXi-Studio/unix-pinia',
+    docs: 'https://mengxi-studio.github.io/unix-pinia/',
+    npm: { pkg: '@meng-xi/unix-pinia', version: '0.1.0', date: '2026-10-18', downloads: 0 },
+    stars: 0,
+  },
+  {
     slug: 'uni-ui',
     name: 'uni-ui',
     platform: 'uni-app',
@@ -268,14 +348,13 @@ set('', data, null).catch((err) => {
       '多端兼容：H5、微信小程序、支付宝小程序、App',
       '组件齐全：按 Vant 4 六大分类，含 Field / Form / Picker / Calendar / Uploader、Toast / Dialog / Tabs / NavBar / Card 等',
     ],
-    install: 'npm install @mengxi/uni-ui',
-    installNote:
-      '在 pages.json 中配置 easycom 自动导入：{"easycom": {"custom": {"^mx-(.*)": "@mengxi/uni-ui/src/components/mx-$1/mx-$1.vue"}}}。',
-    usage: `<mx-button type="primary">主要按钮</mx-button>`,
+    usage: `<!-- pages.json：配置 easycom 自动导入 -->
+<!-- {"easycom": {"custom": {"^mx-(.*)": "@mengxi/uni-ui/src/components/mx-$1/mx-$1.vue"}}} -->
+
+<mx-button type="primary">主要按钮</mx-button>`,
     usageLang: 'Vue',
     useCases: ['uni-app 项目需要 Vant 风格的跨端组件库'],
     repo: 'https://github.com/MengXi-Studio/uni-ui',
-    npm: { pkg: '@mengxi/uni-ui' },
     stars: 0,
   },
   {
@@ -318,7 +397,7 @@ set('', data, null).catch((err) => {
     useCases: ['快速初始化按需组装技术栈的 uni-app 项目'],
     repo: 'https://github.com/MengXi-Studio/create-uni-app',
     docs: 'https://mengxi-studio.github.io/create-uni-app/',
-    npm: { pkg: '@meng-xi/create-uni-app', version: '1.2.1', date: '2026-09-20', downloads: 231 },
+    npm: { pkg: '@meng-xi/create-uni-app', version: '1.2.1', date: '2026-09-20', downloads: 220 },
     stars: 2,
   },
   {
@@ -352,7 +431,7 @@ export default defineConfig({
     ],
     repo: 'https://github.com/MengXi-Studio/vite-plugin',
     docs: 'https://mengxi-studio.github.io/vite-plugin/',
-    npm: { pkg: '@meng-xi/vite-plugin', version: '1.4.1', date: '2026-09-16', downloads: 435 },
+    npm: { pkg: '@meng-xi/vite-plugin', version: '1.4.1', date: '2026-09-16', downloads: 304 },
     stars: 5,
   },
 ]
