@@ -121,26 +121,103 @@ await router.back(2) // 返回两级`,
     platform: 'uni-app x',
     tagline: '为 uni-app x 提供便利工具的集合',
     description:
-      'uni-app x UTS 工具集，当前以跨端 Toast 为核心能力。覆盖 Android / iOS / Web / 微信 / 鸿蒙五端，按端自动选择混合通道，业务侧零配置。参数与 uni.showToast 完全同构，迁移零成本。',
+      'uni-app x UTS 工具集，含 toast 与 modal 两大模块：与 uni.showToast / uni.showModal 参数完全同构，迁移零成本。App 端 UTS 直挂系统窗口（Android WindowManager / iOS UIWindow），Web 端 DOM 单例自绘，微信 / 鸿蒙原生通道自动降级并结构化留痕，一套 API 全端覆盖。',
     features: [
-      '全端兼容：Android / iOS / Web / 微信 / 鸿蒙五端覆盖，分端混合通道自动分发',
-      'App 端 UTS 直挂系统窗口，position / warning / mask 全生效，失败自动降级 uni.showToast',
-      'Web 端 DOM 单例自绘，无平台截断；icon 超集扩展 warning',
-      '双轨 API：回调式 showToast + Promise 式 showToastAsync + 语义化快捷方法',
-      '结构化降级：ToastFail（errCode / errSubject / param / platform）经 fail 回调留痕可感知',
-      '全局默认配置 configureToast，项目级预设 duration / icon / mask',
+      'toast · App 端 UTS 直挂系统窗口：Android WindowManager / iOS UIWindow 免注册挂窗，position / warning / mask / 精确 duration 全生效，挂窗失败自动降级 uni.showToast',
+      'toast · Web 端 DOM 单例自绘：position / warning / 无平台截断全生效；参数与 uni.showToast 完全同构，迁移零成本',
+      'toast · 双轨 API：回调式 showToast + Promise 式 showToastAsync，语义化快捷 showToastSuccess / showToastError / showToastInfo，hideToast 可靠隐藏',
+      'toast · 全局默认与结构化降级：configureToast 项目级预设 duration / icon / mask；ToastFail（errCode / errSubject / param / platform）经 fail 回调留痕可过滤',
+      'modal · 参数完全对齐 uni.showModal：返回值恒定，ModalResult 的 confirm / cancel 恒存在且互斥，editable 场景 content 携带用户输入',
+      'modal · App 端直挂系统窗口自绘（v0.2.0 起不再走 uni.showModal 原生通道）：蒙层点击不关闭、Android 返回键取消语义、连续调用后调替换前调，弹窗表现跨端一致',
+      'modal · editable 真实输入框与颜色归一化：正文超屏高 60% 自动限高滚动；#RGB / #RRGGBB / #RRGGBBAA 校验，alpha 全生效，微信 / 鸿蒙自动剥离留痕；受限端按钮文案超 4 字符自动截断',
+      'modal · Promise 式与全局默认：showModalAsync 点取消不算失败、showModalAlert 单按钮 alert 语义、configureModal 预设按钮文案与颜色；ModalFail / ModalResult 类型对外导出',
     ],
     install: 'npm install @meng-xi/unix-utils',
     installNote:
       '使用前将包复制到 uni_modules 目录（mkdir -p uni_modules && cp -R node_modules/@meng-xi/unix-utils uni_modules/unix-utils），另支持 HBuilderX 插件市场导入。',
-    usage: `import { showToast } from '@/uni_modules/unix-utils'
+    usage: `// ─── 发出第一条 toast ───────────────────────────
+import { showToast } from '@/uni_modules/unix-utils'
 
-showToast({ title: '保存成功', icon: 'success', duration: 2000 })`,
+// 与 uni.showToast 同构，迁移零成本
+showToast({
+  title: '保存成功',
+  icon: 'success',
+  duration: 2000,
+})
+
+// ─── Promise 式与语义化快捷 ─────────────────────
+import {
+  showToastAsync,
+  showToastSuccess,
+  showToastError,
+  showToastInfo,
+  hideToast,
+} from '@/uni_modules/unix-utils'
+
+// Promise 式：失败 reject ToastFail 结构的 JSON 字符串（全端统一，JSON.parse 还原）
+try {
+  await showToastAsync({ title: '加载中', icon: 'loading' })
+} catch (err) {
+  const fail = JSON.parse<ToastFail>(err as string)
+  if (fail != null) console.error(fail.errCode, fail.param, fail.platform)
+}
+
+// 语义化快捷
+showToastSuccess('成功')
+showToastError('失败')
+showToastInfo('消息')
+
+// 手动隐藏（自绘通道可靠隐藏，含 position 形态）
+hideToast()
+
+// ─── 全局默认配置 ───────────────────────────────
+import { configureToast } from '@/uni_modules/unix-utils'
+
+configureToast({
+  duration: 2000,  // 默认展示时长
+  icon: 'success', // 默认图标
+  mask: false,     // 默认是否显示蒙层
+})
+
+// ─── 弹出第一个模态弹窗（modal 模块）────────────
+import { showModal } from '@/uni_modules/unix-utils'
+
+// 与 uni.showModal 同构，迁移零成本
+showModal({
+  title: '删除确认',
+  content: '删除后不可恢复，是否继续？',
+  confirmColor: '#ff0000',
+  success: (res) => {
+    if (res.confirm) doDelete() // confirm / cancel 恒存在且互斥
+  },
+})
+
+// ─── Promise 式、alert 语义与全局默认 ───────────
+import { showModalAsync, showModalAlert, configureModal } from '@/uni_modules/unix-utils'
+
+// Promise 式：点取消不算失败（resolve），失败 reject ModalFail 结构的 JSON 字符串
+const res = await showModalAsync({ title: '保存修改', content: '是否保存当前修改？' })
+if (res.confirm) save()
+
+// alert 语义（单确定按钮）
+showModalAlert('提示', '操作已完成')
+
+// 全局默认：字段传 null 表示沿用库内置默认 / 平台默认
+configureModal({
+  confirmText: '知道了',
+  confirmColor: '#00aa00',
+  cancelText: null,
+  cancelColor: null,
+})`,
     usageLang: 'UTS',
-    useCases: ['uni-app x 项目统一各端 Toast 行为与降级策略'],
+    useCases: [
+      'uni-app x 项目统一各端 Toast / Modal 行为与降级策略',
+      '替代手写 uni.showToast / uni.showModal 封装：position 不支持、cancel 缺失、按钮文案截断等各端差异库内抹平',
+      '需要 Promise 式调用、alert 语义或全局默认配置的弹窗场景',
+    ],
     repo: 'https://github.com/MengXi-Studio/unix-utils',
     docs: 'https://mengxi-studio.github.io/unix-utils/',
-    npm: { pkg: '@meng-xi/unix-utils', version: '0.1.0', date: '2026-10-09', downloads: 177 },
+    npm: { pkg: '@meng-xi/unix-utils', version: '0.2.0', date: '2026-10-19', downloads: 251 },
     stars: 1,
   },
   {
