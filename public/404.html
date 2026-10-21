@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<title>MengXi-Studio</title>
+		<script>
+			// GitHub Pages SPA 回退：未知路径（如 /projects/uni-router 直链刷新）
+			// 由本页接管，将子路径转为 /?/path 查询串并重定向回站点根目录，
+			// 由 index.html 恢复真实路径后交给 vue-router 渲染。
+			;(function (l) {
+				var base = '/.github/'
+				if (l.pathname.indexOf(base) !== 0) return
+				window.location.replace('//' + l.host + base + '?/' + l.pathname.slice(base.length) + l.search + l.hash)
+			})(window.location)
+		</script>
+	</head>
+	<body></body>
+</html>
