@@ -61,7 +61,7 @@
 | ----------------------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
 | [uni-template-vue3](https://github.com/MengXi-Studio/uni-template-vue3) | mengxi-uniapp：基于 Uniapp + Vue3 开发的兼容多端的多功能库  | —                                                           |
 | [create-uni-app](https://github.com/MengXi-Studio/create-uni-app)       | 基于 uni-app 的交互式脚手架 CLI，按需生成基础项目与可选功能 | [在线文档](https://mengxi-studio.github.io/create-uni-app/) |
-| [unix-architecture](https://github.com/MengXi-Studio/unix-architecture) | uni-app x 分层工程架构模板，预集成组织工具链                | —                                                           |
+| [unix-architecture](https://github.com/MengXi-Studio/unix-architecture) | 为 uni-app x 打造的一体化架构模板                           | —                                                           |
 
 ### ⚙️ 工程化
 
