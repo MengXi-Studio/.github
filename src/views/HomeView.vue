@@ -115,7 +115,7 @@ const aboutCards = [
           路由、请求、UI 组件与工程化工具。
         </p>
         <div class="hero-actions fade-up fade-up-delay-2">
-          <a class="btn btn-primary" href="#projects">浏览项目</a>
+          <RouterLink class="btn btn-primary" :to="{ path: '/', hash: '#projects' }">浏览项目</RouterLink>
           <a
             class="btn btn-ghost"
             href="https://github.com/MengXi-Studio"
