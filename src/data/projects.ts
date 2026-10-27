@@ -435,6 +435,41 @@ setActivePinia(createPinia().use(myPlugin))`,
     stars: 0,
   },
   {
+    slug: 'unix-ui',
+    name: 'unix-ui',
+    platform: 'uni-app x',
+    tagline: '为 uni-app x 提供功能完善的 UI 组件库',
+    description:
+      'UTS + uvue 编写的 uni-app x UI 组件库，一套源码覆盖 App（Android / iOS / HarmonyOS）、Web、小程序，兼容蒸汽模式（vapor）。组件划分、props 命名与视觉规格对齐主流 uni-app 组件库，心智零迁移。底层只依赖 uni-app x 内置组件与 UniElement.animate，不重造渲染栈；UTS 源码分发（Web / 小程序编译为 JS，Android 编译为 Kotlin，iOS 编译为 Swift），由 uni-app x 编译链现场编译。',
+    features: [
+      'easycom 零注册：遵循 uni_modules 组件插件规范（插件 id：m-ui-x），<m-button> 等标签直接使用，无需 import 与手动注册',
+      '多端覆盖，vapor 兼容：一套组件源码覆盖 App（Android / iOS / HarmonyOS）、Web、小程序，兼容蒸汽模式（vapor）',
+      '编译期主题定制：全部视觉参数以 $m-* 变量（全 !default）收敛在 theme/vars.scss，根 uni.scss 定义同名变量即覆盖，零运行时开销',
+      '跨端一致的小屏细节：0.5px hairline 细边框（transform 缩放方案）、按压反馈等平台差异由库内统一处理',
+      '组合式 API + 强类型 UTS：props / events 全量类型标注，UTS / TS 提示到位；动画走 UniElement.animate，无 @keyframes 依赖',
+      '无全局副作用：组件样式自包含，仅引用同包 vars.scss，无全局样式注入，随用随取',
+      '九大组件开箱即用：Button / Cell（CellGroup）/ Row（Col）/ Icon（250+ 图标）/ Image / Text / Space / Loading / Badge，覆盖基础、布局、反馈与展示场景',
+    ],
+    usage: `<template>
+  <m-button type="primary" @click="onClick">主要按钮</m-button>
+</template>
+
+<script setup lang="uts">
+  const onClick = () => {
+    uni.showToast({ title: '点击了按钮' })
+  }
+</script>`,
+    usageLang: 'Vue',
+    useCases: [
+      'uni-app x 多端项目需要开箱即用、跨端一致的 UI 组件库',
+      '用过 Vant 等主流 uni-app 组件库，希望组件划分与 API 心智零迁移',
+      '不想手写按压反馈、0.5px 细边框、文本省略、徽标截断等小屏交互细节',
+    ],
+    repo: 'https://github.com/MengXi-Studio/unix-ui',
+    docs: 'https://mengxi-studio.github.io/unix-ui/',
+    stars: 0,
+  },
+  {
     slug: 'uni-template-vue3',
     name: 'uni-template-vue3',
     platform: 'uni-app',

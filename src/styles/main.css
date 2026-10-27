@@ -1107,6 +1107,13 @@ button {
   color: var(--green);
 }
 
+/* 列内两栏网格：容纳全部项目 / 文档链接，避免单列过长 */
+.footer-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 24px;
+}
+
 .footer-bottom {
   margin-top: 32px;
   padding-top: 24px;
@@ -1243,6 +1250,10 @@ button {
   }
 
   .meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-list {
     grid-template-columns: 1fr;
   }
 

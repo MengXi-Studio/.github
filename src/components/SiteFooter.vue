@@ -5,7 +5,6 @@ import { projects } from '@/data/projects'
 
 const docLinks = projects
   .filter((p) => p.docs)
-  .slice(0, 4)
   .map((p) => ({ label: p.name, href: p.docs! }))
 </script>
 
@@ -26,25 +25,29 @@ const docLinks = projects
         <div class="footer-links">
           <div class="footer-col">
             <h5>项目</h5>
-            <RouterLink
-              v-for="p in projects.slice(0, 5)"
-              :key="p.slug"
-              :to="`/projects/${p.slug}`"
-            >
-              {{ p.name }}
-            </RouterLink>
+            <div class="footer-list">
+              <RouterLink
+                v-for="p in projects"
+                :key="p.slug"
+                :to="`/projects/${p.slug}`"
+              >
+                {{ p.name }}
+              </RouterLink>
+            </div>
           </div>
           <div class="footer-col">
             <h5>文档</h5>
-            <a
-              v-for="d in docLinks"
-              :key="d.label"
-              :href="d.href"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {{ d.label }}
-            </a>
+            <div class="footer-list">
+              <a
+                v-for="d in docLinks"
+                :key="d.label"
+                :href="d.href"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ d.label }}
+              </a>
+            </div>
           </div>
           <div class="footer-col">
             <h5>链接</h5>
