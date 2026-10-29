@@ -81,7 +81,7 @@ router.beforeEach((to, from) => {
     ],
     repo: 'https://github.com/MengXi-Studio/uni-router',
     docs: 'https://mengxi-studio.github.io/uni-router/',
-    npm: { pkg: '@meng-xi/uni-router', version: '2.7.1', date: '2026-08-31', downloads: 143 },
+    npm: { pkg: '@meng-xi/uni-router', version: '2.7.1', date: '2026-08-31', downloads: 133 },
     stars: 11,
   },
   {
@@ -90,29 +90,40 @@ router.beforeEach((to, from) => {
     platform: 'uni-app x',
     tagline: '为 uni-app x 提供类似 vue-router 风格的路由管理系统',
     description:
-      'UTS 编写的 uni-app x 路由管理库，UTS 源码分发（web / 小程序编译为 JS，Android 编译为 Kotlin，iOS 编译为 Swift）。API 与守卫体系对齐 vue-router，另提供可选的基于文件的路由生成构建期工具。',
+      'UTS 编写的 uni-app x 路由管理库，兼容原生（非蒸汽）与蒸汽（vapor）双模式。API 与守卫体系对齐 vue-router，底层只依赖 uni.* 原生导航 API 与 getCurrentPages() 页面栈；UTS 源码分发（Web / 小程序 → JS，Android → Kotlin，iOS → Swift），另提供基于文件的路由生成构建期工具（vite-plugin 子路径导出）。',
     features: [
-      'vue-router 风格 API，meta.isTab 自动 switchTab，重复导航拒绝、并发导航排队',
-      '完整守卫链 + 冷启动守卫 guardRoute()，守卫超时保护与重定向深度上限',
-      '基于文件的路由生成（可选 Vite 插件）：defineUniPage 宏或 route-config 块自动生成 pages.json 与路由表',
-      'ParamsPlugin 跨页传参不暴露明文键名；AnimationPlugin 导航窗口动画（App 原生动画 / H5 WAAPI）',
-      'useLink() 声明式导航 + RouterLink 组件，currentRoute 响应式自动同步',
-      'interceptUniApi 拦截 uni.navigateTo 等原生导航，统一转入守卫链',
+      'vue-router 风格 API（createRouter + push / replace / relaunch / back），meta.isTab 自动切换 switchTab；重复导航自动拒绝、并发导航自动排队，页面栈不足时返回自动兜底回入口页',
+      '完整守卫体系：全局 beforeEach / beforeResolve / afterEach + 路由独享 beforeEnter + 组件内 onBeforeRouteLeave / Update / Enter，守卫超时保护；冷启动（H5 直达 / deeplink）经 guardRoute() 补跑守卫链',
+      '基于文件的路由生成（构建期 opt-in）：@meng-xi/unix-router/vite-plugin 提供 defineUniPage 宏 / route-config 块，routeGen / pagesGen / routesGen 三个独立插件可单独或组合注册，自动生成 pages.json 与路由表',
+      '跨页数据传递：ParamsPlugin 关联存储传参不暴露明文键名、EventsPlugin 对齐官方 events 通道语义（useOpenerEventChannel 回传数据），query 配 queryInt / queryNumber / queryBool 便捷解析',
+      'interceptUniApi 拦截（opt-in）：绕过路由器直调 uni.navigateTo / switchTab 等原生导航，同样被拦截转入守卫链，业务规则无旁路',
+      'AnimationPlugin 导航窗口动画（opt-in）：App 端透传原生 animationType / animationDuration，H5 端以 WAAPI 播放进入 / 退出动画，支持全局默认与单次覆盖',
+      '开箱即用配套：useLink() 与 RouterLink 组件、onShow 自动状态同步（currentRoute 响应式）、RouterError / isNavigationFailure() 错误体系、命名路由 + 严格模式',
     ],
     install: 'npm install @meng-xi/unix-router',
-    usage: `export const router = createRouter({ routes, strict: true })
+    usage: `export const router = createRouter({
+  routes,
+  strict: true,
+  plugins: [new ParamsPlugin(), new InterceptorPlugin()],
+  interceptUniApi: true,
+})
 
+// main.ts：app.use(router) 注入全局 mixin，onShow 时自动同步路由
 await router.push({ name: 'about', query: new Map([['a', '1']]) })
+await router.back(1) // 返回上一页；栈深不足自动兜底回首个 tabBar 页
 
-await router.back(2) // 返回两级`,
-    usageLang: 'UTS',
+router.beforeEach((to, from) => {
+  if (to.meta.requireAuth && !isLoggedIn()) return { name: 'login' }
+})`,
+    usageLang: 'TypeScript',
     useCases: [
       'uni-app x 项目需要 vue-router 心智的路由与守卫体系',
       '需要拦截返回键 / 原生导航 API 并统一纳入守卫链',
+      '构建期从页面文件自动生成 pages.json 与路由表，消除双份手工维护',
     ],
     repo: 'https://github.com/MengXi-Studio/unix-router',
     docs: 'https://mengxi-studio.github.io/unix-router/',
-    npm: { pkg: '@meng-xi/unix-router', version: '0.8.0', date: '2026-09-27', downloads: 250 },
+    npm: { pkg: '@meng-xi/unix-router', version: '0.8.1', date: '2026-10-29', downloads: 82 },
     stars: 4,
   },
   {
@@ -217,7 +228,7 @@ configureModal({
     ],
     repo: 'https://github.com/MengXi-Studio/unix-utils',
     docs: 'https://mengxi-studio.github.io/unix-utils/',
-    npm: { pkg: '@meng-xi/unix-utils', version: '0.2.0', date: '2026-10-19', downloads: 266 },
+    npm: { pkg: '@meng-xi/unix-utils', version: '0.2.0', date: '2026-10-19', downloads: 274 },
     stars: 2,
   },
   {
@@ -249,7 +260,7 @@ request<UTSJSONObject>({ url: '/api/get', method: 'GET', params: { page: 1 } })
     ],
     repo: 'https://github.com/MengXi-Studio/unix-request',
     docs: 'https://mengxi-studio.github.io/unix-request/',
-    npm: { pkg: '@meng-xi/unix-request', version: '0.1.0', date: '2026-10-13', downloads: 23 },
+    npm: { pkg: '@meng-xi/unix-request', version: '0.1.0', date: '2026-10-13', downloads: 25 },
     stars: 1,
   },
   {
@@ -328,7 +339,7 @@ set('', data, null).catch((err) => {
     ],
     repo: 'https://github.com/MengXi-Studio/unix-storage',
     docs: 'https://mengxi-studio.github.io/unix-storage/',
-    npm: { pkg: '@meng-xi/unix-storage', version: '0.1.0', date: '2026-10-17', downloads: 18 },
+    npm: { pkg: '@meng-xi/unix-storage', version: '0.1.0', date: '2026-10-17', downloads: 24 },
     stars: 1,
   },
   {
@@ -408,7 +419,7 @@ setActivePinia(createPinia().use(myPlugin))`,
     ],
     repo: 'https://github.com/MengXi-Studio/unix-pinia',
     docs: 'https://mengxi-studio.github.io/unix-pinia/',
-    npm: { pkg: '@meng-xi/unix-pinia', version: '0.1.0', date: '2026-10-18', downloads: 332 },
+    npm: { pkg: '@meng-xi/unix-pinia', version: '0.1.0', date: '2026-10-18', downloads: 337 },
     stars: 1,
   },
   {
@@ -444,7 +455,7 @@ setActivePinia(createPinia().use(myPlugin))`,
     features: [
       'easycom 零注册：遵循 uni_modules 组件插件规范（插件 id：m-ui-x），<m-button> 等标签直接使用，无需 import 与手动注册',
       '多端覆盖，vapor 兼容：一套组件源码覆盖 App（Android / iOS / HarmonyOS）、Web、小程序，兼容蒸汽模式（vapor）',
-      '编译期主题定制：全部视觉参数以 $m-* 变量（全 !default）收敛在 theme/vars.scss，根 uni.scss 定义同名变量即覆盖，零运行时开销',
+      '编译期主题定制：全部视觉参数以 $m-* 变量（全 !default）收敛在 theme/vars.scss，根 uni.scss 定义同名变量即覆盖，不定义则零配置使用默认主题，零运行时开销',
       '跨端一致的小屏细节：0.5px hairline 细边框（transform 缩放方案）、按压反馈等平台差异由库内统一处理',
       '组合式 API + 强类型 UTS：props / events 全量类型标注，UTS / TS 提示到位；动画走 UniElement.animate，无 @keyframes 依赖',
       '无全局副作用：组件样式自包含，仅引用同包 vars.scss，无全局样式注入，随用随取',
@@ -470,7 +481,7 @@ setActivePinia(createPinia().use(myPlugin))`,
     ],
     repo: 'https://github.com/MengXi-Studio/unix-ui',
     docs: 'https://mengxi-studio.github.io/unix-ui/',
-    npm: { pkg: '@meng-xi/unix-ui', version: '0.1.0', date: '2026-10-27', downloads: 0 },
+    npm: { pkg: '@meng-xi/unix-ui', version: '0.1.0', date: '2026-10-27', downloads: 195 },
     stars: 0,
   },
   {
@@ -514,7 +525,7 @@ setActivePinia(createPinia().use(myPlugin))`,
       '一键接入梦曦插件系（unix-* / mx-*）的标准装配范式',
     ],
     repo: 'https://github.com/MengXi-Studio/unix-architecture',
-    stars: 1,
+    stars: 2,
   },
   {
     slug: 'create-uni-app',
@@ -538,7 +549,7 @@ setActivePinia(createPinia().use(myPlugin))`,
     useCases: ['快速初始化按需组装技术栈的 uni-app 项目'],
     repo: 'https://github.com/MengXi-Studio/create-uni-app',
     docs: 'https://mengxi-studio.github.io/create-uni-app/',
-    npm: { pkg: '@meng-xi/create-uni-app', version: '1.2.1', date: '2026-09-20', downloads: 39 },
+    npm: { pkg: '@meng-xi/create-uni-app', version: '1.2.1', date: '2026-09-20', downloads: 44 },
     stars: 2,
   },
   {
@@ -572,7 +583,7 @@ export default defineConfig({
     ],
     repo: 'https://github.com/MengXi-Studio/vite-plugin',
     docs: 'https://mengxi-studio.github.io/vite-plugin/',
-    npm: { pkg: '@meng-xi/vite-plugin', version: '1.4.1', date: '2026-09-16', downloads: 167 },
+    npm: { pkg: '@meng-xi/vite-plugin', version: '1.4.1', date: '2026-09-16', downloads: 156 },
     stars: 5,
   },
 ]
