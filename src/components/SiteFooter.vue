@@ -58,6 +58,8 @@ const docLinks = projects.filter(p => p.docs).map(p => ({ label: p.name, href: p
 				<div class="footer-meta">
 					<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer"> 湘ICP备2026007285号-2 </a>
 
+					<a href="https://beian.mps.gov.cn/#/query/webSearch?code=43012102001464" target="_blank" rel="noopener noreferrer"> 湘公网安备43012102001464号 </a>
+
 					<a href="https://github.com/MengXi-Studio/.github/blob/master/LICENSE" target="_blank" rel="noopener noreferrer"> MIT License </a>
 				</div>
 			</div>
