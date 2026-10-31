@@ -81,7 +81,7 @@ router.beforeEach((to, from) => {
     ],
     repo: 'https://github.com/MengXi-Studio/uni-router',
     docs: 'https://mengxi-studio.github.io/uni-router/',
-    npm: { pkg: '@meng-xi/uni-router', version: '2.7.1', date: '2026-08-31', downloads: 133 },
+    npm: { pkg: '@meng-xi/uni-router', version: '2.7.1', date: '2026-08-31', downloads: 162 },
     stars: 11,
   },
   {
@@ -123,7 +123,7 @@ router.beforeEach((to, from) => {
     ],
     repo: 'https://github.com/MengXi-Studio/unix-router',
     docs: 'https://mengxi-studio.github.io/unix-router/',
-    npm: { pkg: '@meng-xi/unix-router', version: '0.8.1', date: '2026-10-29', downloads: 82 },
+    npm: { pkg: '@meng-xi/unix-router', version: '0.8.1', date: '2026-10-29', downloads: 218 },
     stars: 4,
   },
   {
@@ -228,7 +228,7 @@ configureModal({
     ],
     repo: 'https://github.com/MengXi-Studio/unix-utils',
     docs: 'https://mengxi-studio.github.io/unix-utils/',
-    npm: { pkg: '@meng-xi/unix-utils', version: '0.2.0', date: '2026-10-19', downloads: 274 },
+    npm: { pkg: '@meng-xi/unix-utils', version: '0.2.0', date: '2026-10-19', downloads: 277 },
     stars: 2,
   },
   {
@@ -260,7 +260,7 @@ request<UTSJSONObject>({ url: '/api/get', method: 'GET', params: { page: 1 } })
     ],
     repo: 'https://github.com/MengXi-Studio/unix-request',
     docs: 'https://mengxi-studio.github.io/unix-request/',
-    npm: { pkg: '@meng-xi/unix-request', version: '0.1.0', date: '2026-10-13', downloads: 25 },
+    npm: { pkg: '@meng-xi/unix-request', version: '0.1.0', date: '2026-10-13', downloads: 26 },
     stars: 1,
   },
   {
@@ -339,87 +339,80 @@ set('', data, null).catch((err) => {
     ],
     repo: 'https://github.com/MengXi-Studio/unix-storage',
     docs: 'https://mengxi-studio.github.io/unix-storage/',
-    npm: { pkg: '@meng-xi/unix-storage', version: '0.1.0', date: '2026-10-17', downloads: 24 },
+    npm: { pkg: '@meng-xi/unix-storage', version: '0.1.0', date: '2026-10-17', downloads: 25 },
     stars: 1,
   },
   {
     slug: 'unix-pinia',
     name: 'unix-pinia',
     platform: 'uni-app x',
-    tagline: '为 uni-app x 提供 Pinia 风格的状态管理库',
+    tagline: '为 uni-app x 提供 Pinia 风格的状态管理与内置持久化',
     description:
-      'Pinia 心智的 uni-app x 状态管理库（UTS 编写，setup 式）。uni-app x 的 vdom 模式 App 原生端无法使用标准 Pinia，unix-pinia 把 Pinia 的使用习惯完整搬到 UTS：setup 式 defineStore、storeToRefs、免挂载单例、插件体系，一比一复刻 API 面，裁掉平台不可实现项并给足替代方案，一套 API 多端覆盖。',
+      'class 式 store 的 uni-app x 状态管理库（UTS 编写，class + reactive 架构，内置持久化）。uni-app x 的 vdom 模式 App 原生端无法使用标准 Pinia，unix-pinia 把 Pinia 的结构化心智完整搬到 UTS：state 用 reactive 强类型包裹、派生值用 class getter、action 就是普通 method，$patch / $reset / $subscribe / $onAction 等完整 $-API 内置，createPersistPlugin 一处配置全部 store 自动持久化。',
     features: [
-      'setup 式 defineStore：defineStore<T>(id, setup)，state 用 Ref、getter 用 ComputedRef、action 用箭头函数，与 Pinia 官方推荐写法一致',
-      '免挂载单例：模块级注册表保证应用级单例，跨页面共享状态，无需 app.use，纯状态管理零挂载代码',
-      '实例 API 顶层函数映射：patch / dispose / getStoreId 对应 $patch / $dispose / $id（UTS 无 Proxy，无法在 store 对象上挂方法）',
-      '跨 store 依赖：setup 内直接调用对方 useStore，注册表保证单例',
+      'class 式 defineStore：class XxxStore extends PiniaStoreBase——state 用 reactive<T> 强类型包裹、派生值用 class getter、action 为普通 method，对齐 Pinia 官方 state / getters / actions 结构化心智',
+      '完整实例 API：$patch(partial) / $reset() / $subscribe(cb) / $onAction(cb) / $dispose() / $id / $state / $save() 全部内置（由 _doReset / _hydrate / _serialize 三个 Template Method 钩子驱动）',
+      '内置持久化插件：createPersistPlugin 一处配置全部 store 生效——store 创建自动恢复、$patch / $reset / $save 自动落盘，只需按需重写 _serialize / _hydrate 钩子；clearPersistedState 可清空指定 store',
+      '免挂载单例：模块级注册表保证应用级单例，跨页面共享状态，纯状态管理零挂载代码',
       '插件体系：pinia.use(plugin) 链式注册，PiniaPluginContext（pinia / store / storeId）对齐标准 Pinia 三字段',
-      '幂等与可预测：同 id 重复 defineStore 警告并返回既有实例；dispose 后 useStore 重建全新实例',
-      '强类型 UTS：全量显式类型标注；Kotlin 泛型擦除边界已在库内收敛，业务侧零感知',
-      '双端实测：Web（JS 编译链）与 Android（Kotlin 编译链、真机）全用例通过，双端行为一致',
+      '跨 store 依赖：method 内直接调用对方 useStore()，注册表保证单例',
+      '可替换存储后端：setStorageAdapter({ get, set, remove })，默认 uni storage，可换 unix-storage / 原生 preferences',
+      '幂等与可预测：同 id 重复 defineStore 警告并返回既有实例；$dispose 后 useStore 重建全新实例',
+      '强类型 UTS：全量显式类型标注，Kotlin 泛型擦除与可空性边界已在库内收敛，业务侧零感知',
+      '双端实测：Web（JS 编译链）与 Android（Kotlin 编译链、云打包）全用例通过',
     ],
     install: 'npm install @meng-xi/unix-pinia',
     installNote:
       '使用前将包内容同步到工程 uni_modules/ux-pinia/（编译器不扫描 node_modules）：mkdir -p uni_modules && cp -R node_modules/@meng-xi/unix-pinia uni_modules/ux-pinia，业务侧从 @/uni_modules/ux-pinia 导入；另支持 HBuilderX 插件市场搜索 ux-pinia 导入。',
     usage: `// ─── 定义 store（stores/counter.uts）────────────
-import type { Ref, ComputedRef } from 'vue'
-import { defineStore } from '@/uni_modules/ux-pinia'
+import { reactive } from 'vue'
+import { defineStore, PiniaStoreBase } from '@/uni_modules/ux-pinia'
 
-export type CounterStore = {
-  count: Ref<number>,                   // state：Ref
-  doubleCount: ComputedRef<number>,     // getter：ComputedRef
-  increment: () => void,                // action：箭头函数（UTS 函数声明不能作值传递）
-  reset: () => void                     // $reset 的替代：自定义 reset action
+export type CounterState = { count: number, name: string }
+
+export class CounterStore extends PiniaStoreBase {
+  // state：reactive<T> 强类型包裹（模板 / 脚本直接访问，无 .value）
+  state: CounterState = reactive<CounterState>({ count: 0, name: 'pinia' })
+
+  // 派生值：class getter
+  get doubleCount(): number { return this.state.count * 2 }
+
+  // super() 后必须 bindState(this.state)（$-API 与持久化的前提）
+  constructor() {
+    super()
+    this.bindState(this.state)
+  }
+
+  // action：普通 class method
+  increment(): void { this.state.count++ }
 }
 
-export const useCounterStore = defineStore<CounterStore>('counter', (): CounterStore => {
-  const count: Ref<number> = ref(0)
-  const doubleCount: ComputedRef<number> = computed((): number => count.value * 2)
-  const increment = (): void => { count.value++ }
-  const reset = (): void => { count.value = 0 }
-  return { count, doubleCount, increment, reset } as CounterStore
-})
+export const useCounterStore = defineStore<CounterStore>('counter', (): CounterStore => new CounterStore())
 
 // ─── 页面使用 ───────────────────────────────────
-import { storeToRefs } from '@/uni_modules/ux-pinia'
-import { useCounterStore } from '@/stores/counter.uts'
+const counter = useCounterStore()  // 多次调用返回同一实例（跨页面共享）
+counter.state.count++              // reactive 字段直接读写
+counter.$patch({ count: 10 } as UTSJSONObject)  // 批量修改
+counter.$reset()                   // 重置（_doReset 钩子）
 
-const store = useCounterStore()                    // 多次调用返回同一实例（跨页面共享）
-const { count, doubleCount } = storeToRefs(store)  // 模板解构自动解包
-
-store.count.value++                                // 脚本访问 state：.value（UTS 无 Proxy 不自动解包）
-
-// ─── 实例 API（$-methods 顶层函数映射）──────────
-import { patch, dispose, getStoreId } from '@/uni_modules/ux-pinia'
-
-// ≙ store.$patch(fn)：批量修改
-patch(store, (s: CounterStore): void => { s.count.value = 10 })
-
-const id: string = getStoreId(store)   // ≙ store.$id → 'counter'
-
-dispose(store)                         // ≙ store.$dispose()：注销后下次 useStore 重建
-
-// ─── 跨 store 与插件 ────────────────────────────
-export const useUserStore = defineStore<UserStore>('user', (): UserStore => {
-  const counterStore = useCounterStore()  // 跨 store 依赖：setup 内直接调用对方 useStore
-  const score: Ref<number> = ref(0)
-  const addScoreFromCount = (): void => { score.value += counterStore.count.value }
-  return { score, addScoreFromCount } as UserStore
-})
-
-// 插件（可选；main.uts 顶层登记）
-import { createPinia, setActivePinia } from '@/uni_modules/ux-pinia'
-setActivePinia(createPinia().use(myPlugin))`,
+// ─── 持久化（main.uts 顶层登记，一次配置全部生效）─
+import { createPinia, setActivePinia, createPersistPlugin } from '@/uni_modules/ux-pinia'
+setActivePinia(createPinia().use(createPersistPlugin({
+  keyPrefix: 'ux-pinia:',
+  includeStores: null,             // null = 全部 store
+  excludeStores: new Array<string>(),
+  serializer: null,                // null = JSON.stringify
+})))
+// 需要持久化的 store 重写 _serialize() / _hydrate(data) 两个钩子即可`,
     usageLang: 'UTS',
     useCases: [
       'uni-app x vdom 模式 App 原生端的状态管理（该端无法使用标准 Pinia）',
       '跨页面共享的全局状态：登录态、用户信息、主题配置等',
-      '写过 Pinia 的团队零成本迁移状态层范式',
+      '需要 $-API 完整能力（$patch / $reset / $subscribe / $onAction）与内置持久化的场景',
     ],
     repo: 'https://github.com/MengXi-Studio/unix-pinia',
     docs: 'https://mengxi-studio.github.io/unix-pinia/',
-    npm: { pkg: '@meng-xi/unix-pinia', version: '0.1.0', date: '2026-10-18', downloads: 337 },
+    npm: { pkg: '@meng-xi/unix-pinia', version: '0.2.0', date: '2026-11-01', downloads: 345 },
     stars: 1,
   },
   {
@@ -481,8 +474,8 @@ setActivePinia(createPinia().use(myPlugin))`,
     ],
     repo: 'https://github.com/MengXi-Studio/unix-ui',
     docs: 'https://mengxi-studio.github.io/unix-ui/',
-    npm: { pkg: '@meng-xi/unix-ui', version: '0.1.0', date: '2026-10-27', downloads: 195 },
-    stars: 0,
+    npm: { pkg: '@meng-xi/unix-ui', version: '0.1.0', date: '2026-10-27', downloads: 210 },
+    stars: 1,
   },
   {
     slug: 'uni-template-vue3',
@@ -549,7 +542,7 @@ setActivePinia(createPinia().use(myPlugin))`,
     useCases: ['快速初始化按需组装技术栈的 uni-app 项目'],
     repo: 'https://github.com/MengXi-Studio/create-uni-app',
     docs: 'https://mengxi-studio.github.io/create-uni-app/',
-    npm: { pkg: '@meng-xi/create-uni-app', version: '1.2.1', date: '2026-09-20', downloads: 44 },
+    npm: { pkg: '@meng-xi/create-uni-app', version: '1.2.1', date: '2026-09-20', downloads: 42 },
     stars: 2,
   },
   {
@@ -583,7 +576,7 @@ export default defineConfig({
     ],
     repo: 'https://github.com/MengXi-Studio/vite-plugin',
     docs: 'https://mengxi-studio.github.io/vite-plugin/',
-    npm: { pkg: '@meng-xi/vite-plugin', version: '1.4.1', date: '2026-09-16', downloads: 156 },
+    npm: { pkg: '@meng-xi/vite-plugin', version: '1.4.1', date: '2026-09-16', downloads: 158 },
     stars: 5,
   },
 ]
