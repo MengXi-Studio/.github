@@ -92,7 +92,7 @@ router.beforeEach((to, from) => {
     description:
       'UTS 编写的 uni-app x 路由管理库，兼容原生（非蒸汽）与蒸汽（vapor）双模式。API 与守卫体系对齐 vue-router，底层只依赖 uni.* 原生导航 API 与 getCurrentPages() 页面栈；UTS 源码分发（Web / 小程序 → JS，Android → Kotlin，iOS → Swift），另提供基于文件的路由生成构建期工具（vite-plugin 子路径导出）。',
     features: [
-      'vue-router 风格 API（createRouter + push / replace / relaunch / back），meta.isTab 自动切换 switchTab；重复导航自动拒绝、并发导航自动排队，页面栈不足时返回自动兜底回入口页',
+      'vue-router 风格 API（createRouter + push / replace / relaunch / back），meta.isTab 自动切换 switchTab；重复导航自动拒绝、并发导航自动排队，页面栈不足时返回自动兜底（backFallback 可自定义兜底目标，覆盖无 tabBar 页工程）',
       '完整守卫体系：全局 beforeEach / beforeResolve / afterEach + 路由独享 beforeEnter + 组件内 onBeforeRouteLeave / Update / Enter，守卫超时保护；冷启动（H5 直达 / deeplink）经 guardRoute() 补跑守卫链',
       '基于文件的路由生成（构建期 opt-in）：@meng-xi/unix-router/vite-plugin 提供 defineUniPage 宏 / route-config 块，routeGen / pagesGen / routesGen 三个独立插件可单独或组合注册，自动生成 pages.json 与路由表',
       '跨页数据传递：ParamsPlugin 关联存储传参不暴露明文键名、EventsPlugin 对齐官方 events 通道语义（useOpenerEventChannel 回传数据），query 配 queryInt / queryNumber / queryBool 便捷解析',
@@ -123,7 +123,7 @@ router.beforeEach((to, from) => {
     ],
     repo: 'https://github.com/MengXi-Studio/unix-router',
     docs: 'https://mengxi-studio.github.io/unix-router/',
-    npm: { pkg: '@meng-xi/unix-router', version: '0.8.1', date: '2026-10-29', downloads: 218 },
+    npm: { pkg: '@meng-xi/unix-router', version: '0.8.2', date: '2026-11-01', downloads: 218 },
     stars: 4,
   },
   {
