@@ -501,16 +501,18 @@ setActivePinia(createPinia().use(createPersistPlugin({
     platform: 'uni-app x',
     tagline: '为 uni-app x 打造的一体化架构模板',
     description:
-      'api / stores / router / utils / pages 全分层落地，底层由梦曦工作室自研插件系（unix-* / mx-*）承载：mx-request 网络层、ux-pinia 状态层、ux-router 路由层、ux-storage 凭证持久化。预置登录鉴权闭环、生成式路由、类型组织标准与 AI 辅助开发体系（.trae/），旨在解决 uni-app x 原生 vdom 模式下状态管理、网络请求、本地存储、路由导航等基础能力缺失的问题。',
+      'api / stores / router / utils / pages 全分层落地，底层由梦曦工作室自研插件系承载：mx-request 网络层、ux-pinia 状态层（class 式）、ux-router 路由层、ux-storage 凭证持久化、ux-utils modal/toast，并集成 m-ui-x 组件库。预置登录鉴权闭环、生成式路由、类型组织标准、双语文档站与 AI 辅助开发体系（.trae/），旨在解决 uni-app x 原生 vdom 模式下状态管理、网络请求、本地存储、路由导航等基础能力缺失的问题。',
     features: [
-      '全分层落地：网络 / 接口 / 凭证 / 状态 / 路由 / 守卫 / 配置 / 视图各层职责单一、依赖单向，底层由自研插件系承载（mx-request / ux-pinia / ux-router / ux-storage）',
+      '全分层落地：网络 / 接口 / 凭证 / 状态 / 路由 / 守卫 / 配置 / 组合式函数 / 视图各层职责单一、依赖单向，底层由自研插件系承载（mx-request / ux-pinia / ux-router / ux-storage / ux-utils）',
+      'class 式状态层：stores 基于 ux-pinia 0.2.0（class XxxStore extends PiniaStoreBase，reactive state + class getter + method action），异步适配 ux-router 0.8.2 守卫链',
       '鉴权守卫闭环：白名单 + token 检查 + getInfo + 重定向（query 带 redirect），冷启动经 router.isReady() 补跑 guardRoute 守卫链，消除 H5 直达 / deeplink 竞态',
       'token 同步读写体验：ux-storage 异步持久化 + 模块级内存缓存，守卫内 await ensureAuthReady() 只读一次持久层',
-      '统一错误提示：响应拦截器按错误码映射文案，ERR_CANCELED 静默放行，错误仍 reject 给调用方做业务处理',
+      '统一错误提示：响应拦截器按错误码映射文案，ERR_CANCELED 静默放行，错误仍 reject 给调用方做业务处理；退出登录确认用 showModalAsync（ux-utils）',
       '生成式路由：routes.gen.uts 与页面级 defineUniPage 宏由 @meng-xi/unix-router vite 插件自动生成，新增页面 = 建文件 + 注册 + 页内宏',
       '类型组织标准：「类型跟着消费关系走」，跨层共享类型经 <域>/types.uts 聚合出口具名转发，DTO 在 api 层内联 JSON.parse<T> 还原（规避 Kotlin 泛型擦除）',
       '登录鉴权示例完整：登录 / getInfo / logout / resetToken 全链路 + mock 服务协议，baseURL 一处替换即可接真实后端',
-      'AI 辅助开发体系：.trae/rules + skills + documents + uni-app-x MCP 配置随仓库沉淀，把「AI 如何在此架构下工作」固化为可执行约束',
+      '集成 m-ui-x 组件库：11 个基础组件 easycom 零注册，主题经根 uni.scss 定义 $m-* 变量编译期覆盖',
+      'AI 辅助开发体系：.trae/rules + skills + documents + uni-app-x MCP 配置随仓库沉淀，把「AI 如何在此架构下工作」固化为可执行约束；配套双语 VitePress 文档站与贡献者指南',
     ],
     useCases: [
       '作为 uni-app x 新项目的工程骨架，在分层结构上直接开发业务',

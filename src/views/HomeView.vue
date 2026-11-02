@@ -74,6 +74,7 @@ const community = [
   { img: 'images/qq-group-560903974.jpg', title: 'QQ 交流群', desc: '560903974' },
   { img: 'images/qq-group-1058502344.jpg', title: 'QQ 交流群', desc: '1058502344' },
   { img: 'images/wechat-official-account.jpg', title: '微信公众号', desc: '关注获取动态' },
+  { img: 'images/wechat-official-account-mengxi.jpg', title: '梦曦软件开发工作室', desc: '微信公众号 · 官方帐号' },
 ]
 
 const aboutCards = [
