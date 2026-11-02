@@ -676,13 +676,26 @@ button {
 
 .community-grid {
 	display: grid;
-	grid-template-columns: repeat(5, 1fr);
+	grid-template-columns: repeat(6, 1fr);
 	gap: 16px;
 }
 
 .community-card {
 	padding: 20px 16px;
 	text-align: center;
+	cursor: zoom-in;
+	transition:
+		transform 0.2s,
+		border-color 0.2s;
+}
+
+.community-card:hover {
+	transform: translateY(-2px);
+}
+
+.community-card:focus-visible {
+	outline: 2px solid var(--green);
+	outline-offset: 2px;
 }
 
 .community-card img {
@@ -1466,6 +1479,69 @@ button {
 
 .community-card:hover img {
 	transform: scale(1.04);
+}
+
+/* 二维码放大预览（Lightbox） */
+.lightbox {
+	position: fixed;
+	inset: 0;
+	z-index: 1000;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	padding: 24px;
+	background: rgba(2, 4, 8, 0.86);
+	backdrop-filter: blur(8px);
+	cursor: zoom-out;
+}
+
+.lightbox img {
+	width: min(72vw, 420px);
+	max-height: 70vh;
+	object-fit: contain;
+	border-radius: 12px;
+	background: #fff;
+	padding: 12px;
+}
+
+.lightbox p {
+	color: var(--text-muted);
+	font-size: 14px;
+}
+
+.lightbox-close {
+	position: absolute;
+	top: 18px;
+	right: 22px;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	border: 1px solid var(--border);
+	background: rgba(255, 255, 255, 0.06);
+	color: var(--text-muted);
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+	transition:
+		color 0.2s,
+		border-color 0.2s;
+}
+
+.lightbox-close:hover {
+	color: var(--green);
+	border-color: var(--green);
+}
+
+.lightbox-enter-active,
+.lightbox-leave-active {
+	transition: opacity 0.2s;
+}
+
+.lightbox-enter-from,
+.lightbox-leave-to {
+	opacity: 0;
 }
 
 /* 复制按钮按压反馈 */

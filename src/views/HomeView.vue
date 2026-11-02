@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { asset } from '@/utils/assets'
 import {
   projects,
@@ -69,13 +69,39 @@ const badges = [
 ]
 
 const community = [
+  { img: 'images/wechat-official-account-mengxi.jpg', title: '梦曦软件开发工作室', desc: '微信公众号 · 官方帐号' },
   { img: 'images/wechat-group-main.jpg', title: '微信总群', desc: '开源社区 · 总群' },
   { img: 'images/wechat-group-announce.jpg', title: '公告通知群', desc: '版本发布 / 重要通知' },
   { img: 'images/qq-group-560903974.jpg', title: 'QQ 交流群', desc: '560903974' },
   { img: 'images/qq-group-1058502344.jpg', title: 'QQ 交流群', desc: '1058502344' },
   { img: 'images/wechat-official-account.jpg', title: '微信公众号', desc: '关注获取动态' },
-  { img: 'images/wechat-official-account-mengxi.jpg', title: '梦曦软件开发工作室', desc: '微信公众号 · 官方帐号' },
 ]
+
+// 二维码点击放大预览（原生实现，点击遮罩或按 Esc 关闭）
+const preview = ref<{ img: string; title: string } | null>(null)
+
+function openPreview(c: { img: string; title: string }): void {
+  preview.value = { img: asset(c.img), title: c.title }
+}
+
+function closePreview(): void {
+  preview.value = null
+}
+
+function onPreviewKeydown(e: KeyboardEvent): void {
+  if (e.key === 'Escape') closePreview()
+}
+
+watch(preview, (v) => {
+  document.body.style.overflow = v ? 'hidden' : ''
+  if (v) window.addEventListener('keydown', onPreviewKeydown)
+  else window.removeEventListener('keydown', onPreviewKeydown)
+})
+
+onBeforeUnmount(() => {
+  document.body.style.overflow = ''
+  window.removeEventListener('keydown', onPreviewKeydown)
+})
 
 const aboutCards = [
   {
@@ -222,7 +248,17 @@ const aboutCards = [
           </p>
         </div>
         <div class="community-grid" v-reveal.stagger>
-          <div v-for="c in community" :key="c.img" class="glass-card community-card">
+          <div
+            v-for="c in community"
+            :key="c.img"
+            class="glass-card community-card"
+            role="button"
+            tabindex="0"
+            :aria-label="`放大查看${c.title}二维码`"
+            @click="openPreview(c)"
+            @keydown.enter="openPreview(c)"
+            @keydown.space.prevent="openPreview(c)"
+          >
             <img :src="asset(c.img)" :alt="c.title" loading="lazy" />
             <h4>{{ c.title }}</h4>
             <p>{{ c.desc }}</p>
@@ -231,4 +267,15 @@ const aboutCards = [
       </div>
     </section>
   </main>
+
+  <!-- 二维码放大预览 -->
+  <Teleport to="body">
+    <Transition name="lightbox">
+      <div v-if="preview" class="lightbox" role="dialog" aria-modal="true" :aria-label="preview.title" @click="closePreview">
+        <img :src="preview.img" :alt="preview.title" />
+        <p>{{ preview.title }}</p>
+        <button class="lightbox-close" aria-label="关闭预览" @click.stop="closePreview">×</button>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
