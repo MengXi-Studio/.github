@@ -81,7 +81,7 @@ router.beforeEach((to, from) => {
     ],
     repo: 'https://github.com/MengXi-Studio/uni-router',
     docs: 'https://mengxi-studio.github.io/uni-router/',
-    npm: { pkg: '@meng-xi/uni-router', version: '2.7.1', date: '2026-08-31', downloads: 180 },
+    npm: { pkg: '@meng-xi/uni-router', version: '2.7.1', date: '2026-08-31', downloads: 171 },
     stars: 12,
   },
   {
@@ -123,7 +123,7 @@ router.beforeEach((to, from) => {
     ],
     repo: 'https://github.com/MengXi-Studio/unix-router',
     docs: 'https://mengxi-studio.github.io/unix-router/',
-    npm: { pkg: '@meng-xi/unix-router', version: '0.8.2', date: '2026-11-01', downloads: 406 },
+    npm: { pkg: '@meng-xi/unix-router', version: '0.8.2', date: '2026-11-01', downloads: 485 },
     stars: 4,
   },
   {
@@ -228,7 +228,7 @@ configureModal({
     ],
     repo: 'https://github.com/MengXi-Studio/unix-utils',
     docs: 'https://mengxi-studio.github.io/unix-utils/',
-    npm: { pkg: '@meng-xi/unix-utils', version: '0.2.0', date: '2026-10-19', downloads: 287 },
+    npm: { pkg: '@meng-xi/unix-utils', version: '0.2.0', date: '2026-10-19', downloads: 291 },
     stars: 2,
   },
   {
@@ -260,7 +260,7 @@ request<UTSJSONObject>({ url: '/api/get', method: 'GET', params: { page: 1 } })
     ],
     repo: 'https://github.com/MengXi-Studio/unix-request',
     docs: 'https://mengxi-studio.github.io/unix-request/',
-    npm: { pkg: '@meng-xi/unix-request', version: '0.1.0', date: '2026-10-13', downloads: 68 },
+    npm: { pkg: '@meng-xi/unix-request', version: '0.1.0', date: '2026-10-13', downloads: 367 },
     stars: 1,
   },
   {
@@ -339,7 +339,7 @@ set('', data, null).catch((err) => {
     ],
     repo: 'https://github.com/MengXi-Studio/unix-storage',
     docs: 'https://mengxi-studio.github.io/unix-storage/',
-    npm: { pkg: '@meng-xi/unix-storage', version: '0.1.0', date: '2026-10-17', downloads: 407 },
+    npm: { pkg: '@meng-xi/unix-storage', version: '0.1.0', date: '2026-10-17', downloads: 410 },
     stars: 1,
   },
   {
@@ -412,7 +412,7 @@ setActivePinia(createPinia().use(createPersistPlugin({
     ],
     repo: 'https://github.com/MengXi-Studio/unix-pinia',
     docs: 'https://mengxi-studio.github.io/unix-pinia/',
-    npm: { pkg: '@meng-xi/unix-pinia', version: '0.2.0', date: '2026-11-01', downloads: 511 },
+    npm: { pkg: '@meng-xi/unix-pinia', version: '0.2.0', date: '2026-11-01', downloads: 540 },
     stars: 1,
   },
   {
@@ -452,7 +452,7 @@ setActivePinia(createPinia().use(createPersistPlugin({
       '跨端一致的小屏细节：0.5px hairline 细边框（transform 缩放方案）、按压反馈等平台差异由库内统一处理',
       '组合式 API + 强类型 UTS：props / events 全量类型标注，UTS / TS 提示到位；动画走 UniElement.animate，无 @keyframes 依赖',
       '无全局副作用：组件样式自包含，仅引用同包 vars.scss，无全局样式注入，随用随取',
-      '十八个基础组件开箱即用：Button / Cell（CellGroup）/ Row（Col）/ Grid / Icon（250+ 图标）/ Image / Text / Input / Calendar（面板 / 弹层 / 输入三形态）/ Space / Divider / Compact / Loading / Badge / Overlay / Popup / Toast，覆盖基础、布局、表单、反馈与展示场景',
+      '组件矩阵覆盖基础、布局、表单、反馈与展示：Button / Cell（CellGroup）/ Row（Col）/ Grid / Icon（250+ 图标）/ Image / Text / Input / Calendar（面板 / 弹层 / 输入三形态）/ Space / Divider / Compact / Loading / Badge / Overlay / Popup / Toast，0.3.0 新增 Flex（FlexItem）/ StatusBar / Sticky（StickyBox）/ Waterfall（三件套）/ Cascader（面板 / 弹层 / 输入三形态）',
     ],
     install: 'npm install @meng-xi/unix-ui',
     installNote:
@@ -474,7 +474,7 @@ setActivePinia(createPinia().use(createPersistPlugin({
     ],
     repo: 'https://github.com/MengXi-Studio/unix-ui',
     docs: 'https://mengxi-studio.github.io/unix-ui/',
-    npm: { pkg: '@meng-xi/unix-ui', version: '0.2.0', date: '2026-11-03', downloads: 238 },
+    npm: { pkg: '@meng-xi/unix-ui', version: '0.3.0', date: '2026-11-05', downloads: 612 },
     stars: 1,
   },
   {
@@ -544,7 +544,7 @@ setActivePinia(createPinia().use(createPersistPlugin({
     useCases: ['快速初始化按需组装技术栈的 uni-app 项目'],
     repo: 'https://github.com/MengXi-Studio/create-uni-app',
     docs: 'https://mengxi-studio.github.io/create-uni-app/',
-    npm: { pkg: '@meng-xi/create-uni-app', version: '1.2.1', date: '2026-09-20', downloads: 44 },
+    npm: { pkg: '@meng-xi/create-uni-app', version: '1.2.1', date: '2026-09-20', downloads: 48 },
     stars: 2,
   },
   {
@@ -578,8 +578,8 @@ export default defineConfig({
     ],
     repo: 'https://github.com/MengXi-Studio/vite-plugin',
     docs: 'https://mengxi-studio.github.io/vite-plugin/',
-    npm: { pkg: '@meng-xi/vite-plugin', version: '1.4.1', date: '2026-09-16', downloads: 168 },
-    stars: 5,
+    npm: { pkg: '@meng-xi/vite-plugin', version: '1.4.1', date: '2026-09-16', downloads: 123 },
+    stars: 4,
   },
 ]
 
