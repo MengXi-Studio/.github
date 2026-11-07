@@ -1487,14 +1487,29 @@ button {
 	inset: 0;
 	z-index: 1000;
 	display: flex;
-	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: 14px;
 	padding: 24px;
-	background: rgba(2, 4, 8, 0.86);
-	backdrop-filter: blur(8px);
 	cursor: zoom-out;
+}
+
+/* 遮罩独立成层：只淡入淡出它，卡片本身保持实心，避免半透明穿透 */
+.lightbox-backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba(2, 4, 8, 0.86);
+	-webkit-backdrop-filter: blur(8px);
+	backdrop-filter: blur(8px);
+}
+
+.lightbox-body {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	max-width: 100%;
 }
 
 .lightbox img {
@@ -1534,14 +1549,62 @@ button {
 	border-color: var(--green);
 }
 
-.lightbox-enter-active,
+/* 进场：遮罩淡入，卡片实心轻微回弹上浮；离场快速收拢 */
+.lightbox-enter-active {
+	transition: opacity 0.2s;
+}
+
+.lightbox-enter-active .lightbox-backdrop {
+	transition: opacity 0.24s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.lightbox-enter-from .lightbox-backdrop {
+	opacity: 0;
+}
+
+.lightbox-enter-active .lightbox-body {
+	transition:
+		opacity 0.18s ease-out,
+		transform 0.32s cubic-bezier(0.34, 1.36, 0.64, 1);
+}
+
+.lightbox-enter-from .lightbox-body {
+	opacity: 0;
+	transform: scale(0.9);
+}
+
+.lightbox-enter-active .lightbox-close {
+	transition:
+		opacity 0.2s ease-out 0.1s,
+		transform 0.24s cubic-bezier(0.34, 1.36, 0.64, 1) 0.1s;
+}
+
+.lightbox-enter-from .lightbox-close {
+	opacity: 0;
+	transform: scale(0.8);
+}
+
 .lightbox-leave-active {
 	transition: opacity 0.2s;
 }
 
-.lightbox-enter-from,
-.lightbox-leave-to {
+.lightbox-leave-active .lightbox-backdrop {
+	transition: opacity 0.18s ease-in;
+}
+
+.lightbox-leave-to .lightbox-backdrop {
 	opacity: 0;
+}
+
+.lightbox-leave-active .lightbox-body {
+	transition:
+		opacity 0.16s ease-in,
+		transform 0.18s ease-in;
+}
+
+.lightbox-leave-to .lightbox-body {
+	opacity: 0;
+	transform: scale(0.96);
 }
 
 /* 复制按钮按压反馈 */

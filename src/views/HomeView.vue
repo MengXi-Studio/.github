@@ -266,16 +266,19 @@ const aboutCards = [
         </div>
       </div>
     </section>
-  </main>
 
-  <!-- 二维码放大预览 -->
-  <Teleport to="body">
-    <Transition name="lightbox">
-      <div v-if="preview" class="lightbox" role="dialog" aria-modal="true" :aria-label="preview.title" @click="closePreview">
-        <img :src="preview.img" :alt="preview.title" />
-        <p>{{ preview.title }}</p>
-        <button class="lightbox-close" aria-label="关闭预览" @click.stop="closePreview">×</button>
-      </div>
-    </Transition>
-  </Teleport>
+    <!-- 二维码放大预览 -->
+    <Teleport to="body">
+      <Transition name="lightbox">
+        <div v-if="preview" class="lightbox" role="dialog" aria-modal="true" :aria-label="preview.title" @click="closePreview">
+          <div class="lightbox-backdrop" aria-hidden="true" />
+          <div class="lightbox-body">
+            <img :src="preview.img" :alt="preview.title" />
+            <p>{{ preview.title }}</p>
+          </div>
+          <button class="lightbox-close" aria-label="关闭预览" @click.stop="closePreview">×</button>
+        </div>
+      </Transition>
+    </Teleport>
+  </main>
 </template>
