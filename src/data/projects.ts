@@ -452,7 +452,7 @@ setActivePinia(createPinia().use(createPersistPlugin({
       '跨端一致的小屏细节：0.5px hairline 细边框（transform 缩放方案）、按压反馈等平台差异由库内统一处理',
       '组合式 API + 强类型 UTS：props / events 全量类型标注，UTS / TS 提示到位；动画走 UniElement.animate，无 @keyframes 依赖',
       '无全局副作用：组件样式自包含，仅引用同包 vars.scss，无全局样式注入，随用随取',
-      '组件矩阵覆盖基础、布局、表单、反馈与展示：Button / Cell（CellGroup）/ Row（Col）/ Grid / Icon（250+ 图标）/ Image / Text / Input / Calendar（面板 / 弹层 / 输入三形态）/ Space / Divider / Compact / Loading / Badge / Overlay / Popup / Toast，0.3.0 新增 Flex（FlexItem）/ StatusBar / Sticky（StickyBox）/ Waterfall（三件套）/ Cascader（面板 / 弹层 / 输入三形态）',
+      '组件矩阵覆盖基础、布局、表单、反馈与展示：Button / Cell（CellGroup）/ Row（Col）/ Grid / Icon（250+ 图标）/ Image / Text / Input / Calendar（面板 / 弹层 / 输入三形态）/ Space / Divider / Compact / Loading / Badge / Overlay / Popup / Toast，0.3.0 新增 Flex（FlexItem）/ StatusBar / Sticky（StickyBox）/ Waterfall（三件套）/ Cascader（面板 / 弹层 / 输入三形态），0.4.0 新增 Tabs（Tab，line / card / pill 三风格，sticky / scrollspy / animated / swipeable / before-change 对标 Vant），Image 补充 preview 点击大图预览（uni.previewImage，支持 preview-list / preview-current）',
     ],
     install: 'npm install @meng-xi/unix-ui',
     installNote:
@@ -474,8 +474,8 @@ setActivePinia(createPinia().use(createPersistPlugin({
     ],
     repo: 'https://github.com/MengXi-Studio/unix-ui',
     docs: 'https://mengxi-studio.github.io/unix-ui/',
-    npm: { pkg: '@meng-xi/unix-ui', version: '0.3.1', date: '2026-11-09', downloads: 812 },
-    stars: 1,
+    npm: { pkg: '@meng-xi/unix-ui', version: '0.4.0', date: '2026-11-11', downloads: 812 },
+    stars: 2,
   },
   {
     slug: 'uni-template-vue3',
