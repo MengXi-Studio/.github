@@ -4,7 +4,6 @@ import { asset } from '@/utils/assets'
 import {
   projects,
   platformLabel,
-  totalDownloads,
   npmCount,
   docSites,
   type Platform,
@@ -14,15 +13,12 @@ import ProjectCard from '@/components/ProjectCard.vue'
 
 const { downloads: liveDownloads } = useLiveStats()
 
-// 所有 npm 包的实时下载量均已拉取成功时展示实时总和，否则回退静态值
+// npm 月下载合计：只累加已拉取成功的包，一个都没拉到（或全部失败）时展示占位符
 const displayDownloads = computed(() => {
-  const pkgs = projects.filter((p) => p.npm)
-  if (!pkgs.length) return totalDownloads
-  const live = pkgs.reduce<number | null>((sum, p) => {
-    const d = liveDownloads.value[p.npm!.pkg]
-    return d === undefined ? null : (sum ?? 0) + d
-  }, null)
-  return live ?? totalDownloads
+  const values = projects
+    .map((p) => (p.npm ? liveDownloads.value[p.npm.pkg] : undefined))
+    .filter((v): v is number => typeof v === 'number')
+  return values.length ? values.reduce((sum, v) => sum + v, 0) : null
 })
 
 type Tab = '全部' | Platform
@@ -172,7 +168,7 @@ const aboutCards = [
           <div class="stat-label">npm 包</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" v-count-up>{{ displayDownloads }}+</div>
+          <div class="stat-value" v-count-up>{{ displayDownloads === null ? '—' : `${displayDownloads}+` }}</div>
           <div class="stat-label">npm 月下载</div>
         </div>
         <div class="stat-card">

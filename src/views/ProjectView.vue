@@ -32,17 +32,27 @@ const starBadge = computed(
     `https://img.shields.io/github/stars/MengXi-Studio/${project.value.slug}?style=flat-square&color=2b9939`,
 )
 
-const { versions: liveVersions, downloads: liveDownloads } = useLiveStats()
+const {
+  stars: liveStars,
+  versions: liveVersions,
+  dates: liveDates,
+  downloads: liveDownloads,
+} = useLiveStats()
 
-// 实时 npm 版本 / 下载量，未拉取成功时回退静态值
+// npm 版本 / 发布时间 / 下载量与仓库 stars 均取实时数据，拉取完成前展示占位符
 const displayNpm = computed(() => {
   const npm = project.value?.npm
   if (!npm) return null
   return {
-    version: liveVersions.value[npm.pkg] ?? npm.version,
-    downloads: liveDownloads.value[npm.pkg] ?? npm.downloads ?? 0,
+    version: liveVersions.value[npm.pkg],
+    date: liveDates.value[npm.pkg],
+    downloads: liveDownloads.value[npm.pkg],
   }
 })
+
+const displayStars = computed(() =>
+  project.value ? liveStars.value[project.value.slug] : undefined,
+)
 </script>
 
 <template>
@@ -135,12 +145,12 @@ const displayNpm = computed(() => {
               <div class="meta-label">最新版本</div>
               <div class="meta-value">
                 v{{ displayNpm.version ?? '—' }}
-                <small v-if="project.npm.date">发布于 {{ project.npm.date }}</small>
+                <small v-if="displayNpm.date">发布于 {{ displayNpm.date }}</small>
               </div>
             </div>
             <div class="glass-card meta-card">
               <div class="meta-label">月下载</div>
-              <div class="meta-value">{{ displayNpm.downloads }}</div>
+              <div class="meta-value">{{ displayNpm.downloads ?? '—' }}</div>
             </div>
           </template>
           <template v-else>
@@ -156,7 +166,7 @@ const displayNpm = computed(() => {
               <div class="meta-label">Stars</div>
               <div class="meta-value">
                 <StarIcon style="color: #e3b341; vertical-align: -2px" />
-                {{ project.stars }}
+                {{ displayStars ?? '—' }}
               </div>
             </div>
           </template>

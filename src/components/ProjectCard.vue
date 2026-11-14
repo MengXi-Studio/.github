@@ -9,7 +9,7 @@ import { GithubIcon, BookIcon, StarIcon } from './icons'
 const props = defineProps<{ project: Project }>()
 
 const { stars: liveStars } = useLiveStats()
-const displayStars = computed(() => liveStars.value[props.project.slug] ?? props.project.stars)
+const displayStars = computed(() => liveStars.value[props.project.slug])
 </script>
 
 <template>
@@ -28,7 +28,7 @@ const displayStars = computed(() => liveStars.value[props.project.slug] ?? props
     <div class="project-card-foot">
       <span class="project-stars">
         <StarIcon />
-        {{ displayStars }}
+        {{ displayStars ?? '—' }}
       </span>
       <div class="project-links">
         <a

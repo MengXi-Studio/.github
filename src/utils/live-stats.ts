@@ -1,17 +1,19 @@
 import { readonly, ref } from 'vue'
 import { projects } from '@/data/projects'
 
-const CACHE_KEY = 'mx-live-stats-v1'
+const CACHE_KEY = 'mx-live-stats-v2'
 const CACHE_TTL = 10 * 60 * 1000
 
 interface LiveStatsData {
   stars: Record<string, number>
   versions: Record<string, string>
+  dates: Record<string, string>
   downloads: Record<string, number>
 }
 
 const stars = ref<Record<string, number>>({})
 const versions = ref<Record<string, string>>({})
+const dates = ref<Record<string, string>>({})
 const downloads = ref<Record<string, number>>({})
 let fetching: Promise<void> | null = null
 
@@ -49,31 +51,43 @@ async function load(): Promise<void> {
     for (const r of repos) stars.value[r.name] = r.stargazers_count
   })
 
-  // npm：逐包拉取最新版本与近 30 天下载量（registry 与 downloads API 均支持 CORS）
+  // npm：逐包拉取元数据（一次请求同时得到最新版本与发布时间）与近 30 天下载量
+  // registry 与 downloads API 均支持 CORS
   const npm = Promise.all(
     projects
       .filter((p) => p.npm)
       .map(async (p) => {
         const pkg = p.npm!.pkg
-        const [latest, dl] = await Promise.allSettled([
-          fetchJson(`https://registry.npmjs.org/${encodeURIComponent(pkg)}/latest`),
+        const [meta, dl] = await Promise.allSettled([
+          fetchJson(`https://registry.npmjs.org/${encodeURIComponent(pkg)}`),
           fetchJson(`https://api.npmjs.org/downloads/point/last-month/${encodeURIComponent(pkg)}`),
         ])
-        if (latest.status === 'fulfilled' && latest.value?.version)
-          versions.value[pkg] = latest.value.version
+        if (meta.status === 'fulfilled') {
+          const ver = meta.value?.['dist-tags']?.latest
+          if (ver) {
+            versions.value[pkg] = ver
+            const time = meta.value?.time?.[ver]
+            if (time) dates.value[pkg] = new Date(time).toISOString().slice(0, 10)
+          }
+        }
         if (dl.status === 'fulfilled' && typeof dl.value?.downloads === 'number')
           downloads.value[pkg] = dl.value.downloads
       }),
   )
 
   await Promise.allSettled([gh, npm])
-  writeCache({ stars: stars.value, versions: versions.value, downloads: downloads.value })
+  writeCache({
+    stars: stars.value,
+    versions: versions.value,
+    dates: dates.value,
+    downloads: downloads.value,
+  })
 }
 
 /**
- * 实时统计数据（stars / npm 版本 / 月下载量）。
- * 首次调用触发后台拉取并写入 sessionStorage 缓存（10 分钟），
- * 拉取完成前组件先展示 projects.ts 中的静态值，失败时静默保留静态值。
+ * 实时统计数据（stars / npm 版本 / 发布时间 / 月下载量）。
+ * 首次调用触发后台拉取并写入 sessionStorage 缓存（10 分钟）；
+ * 拉取完成前组件展示占位符，失败时保持占位符，不在仓库里维护静态数值。
  */
 export function useLiveStats() {
   if (!fetching && typeof window !== 'undefined') {
@@ -81,6 +95,7 @@ export function useLiveStats() {
     if (cached) {
       stars.value = cached.stars
       versions.value = cached.versions
+      dates.value = cached.dates ?? {}
       downloads.value = cached.downloads
     } else {
       fetching = load().catch(() => {
@@ -91,6 +106,7 @@ export function useLiveStats() {
   return {
     stars: readonly(stars),
     versions: readonly(versions),
+    dates: readonly(dates),
     downloads: readonly(downloads),
   }
 }
