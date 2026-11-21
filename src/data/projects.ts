@@ -48,7 +48,7 @@ export const projects: Project[] = [
     features: [
       'vue-router 风格 API（push / replace / relaunch / back），根据 meta.isTab 自动切换 switchTab',
       '完整路由守卫（beforeEach / beforeResolve / afterEach / beforeEnter 等），支持守卫超时保护',
-      '返回拦截：App 物理返回键、导航栏返回、H5 浏览器后退 / 手势均可被守卫拦截',
+      '返回拦截：App 物理返回键、导航栏返回、H5 浏览器后退 / 手势均可被守卫拦截（后退目标按地址栏解析，兼容 hash 与 history 两种路由模式）',
       '冷启动守卫 guardRoute()：H5 URL、小程序场景值、App deeplink 直达页面时补执行守卫链',
       '插件架构：Params / Animation / Channel / Interceptor 四类插件按需注册',
       '页面间通信 usePageChannel()、声明式导航 RouterLink 与 TabBar 组件、复杂参数 storage 持久化',
@@ -433,12 +433,12 @@ setActivePinia(createPinia().use(createPersistPlugin({
       'UTS + uvue 编写的 uni-app x UI 组件库，一套源码覆盖 App（Android / iOS / HarmonyOS）、Web、小程序，兼容蒸汽模式（vapor）。组件划分、props 命名与视觉规格对齐主流 uni-app 组件库，心智零迁移。底层只依赖 uni-app x 内置组件与 UniElement.animate，不重造渲染栈；UTS 源码分发（Web / 小程序编译为 JS，Android 编译为 Kotlin，iOS 编译为 Swift），由 uni-app x 编译链现场编译。',
     features: [
       'easycom 零注册：遵循 uni_modules 组件插件规范（插件 id：m-ui-x），<m-button> 等标签直接使用，无需 import 与手动注册',
-      '多端覆盖，双模式兼容：一套组件源码覆盖 App（Android / iOS / HarmonyOS）、Web、小程序，蒸汽（vapor）/ VDOM 双模式均可云打包；小程序端专项适配（m-overlay 遮罩显隐与过渡时序、m-icon 经 loadFontFace 运行时加载内置字体）',
+      '多端覆盖，双模式兼容：一套组件源码覆盖 App（Android / iOS / HarmonyOS）、Web、小程序，蒸汽（vapor）/ VDOM 双模式均可云打包；小程序端专项适配（m-overlay 遮罩显隐与过渡时序、m-icon 经 loadFontFace 全局一次性加载内置字体、具名 / 默认插槽存在性判定、picker 弹层滚轮定位与复开自愈）',
       '编译期主题定制：全部视觉参数以 $m-* 变量（全 !default）收敛在 theme/vars.scss，根 uni.scss 定义同名变量即覆盖，不定义则零配置使用默认主题，零运行时开销',
       '跨端一致的小屏细节：0.5px hairline 细边框（transform 缩放方案）、按压反馈等平台差异由库内统一处理',
       '组合式 API + 强类型 UTS：props / events 全量类型标注，UTS / TS 提示到位；动画走 UniElement.animate，无 @keyframes 依赖',
       '无全局副作用：组件样式自包含，仅引用同包 vars.scss，无全局样式注入，随用随取',
-      '组件矩阵覆盖基础、布局、表单、反馈与展示：Button / Cell（CellGroup）/ Row（Col）/ Grid / Icon（250+ 图标）/ Image / Text / Input / Calendar（面板 / 弹层 / 输入三形态）/ Space / Divider / Compact / Loading / Badge / Overlay / Popup / Toast；0.3.0 新增 Flex / StatusBar / Sticky / Waterfall / Cascader 三形态，0.4.0 新增 Tabs（Tab，line / card / pill 三风格，sticky / scrollspy / animated / swipeable / before-change 对标 Vant）与 Image 大图预览，0.5.0 组件总数达 46，新增 ColorPicker 三件套、Checkbox 四件套、Fab 双组件、DateStrip 与 69 个纯函数的日期工具集',
+      '组件矩阵覆盖基础、布局、表单、反馈与展示（Button / Cell / Grid / Icon 250+ / Image / Input / Space / Divider / Loading / Badge / Overlay / Popup / Toast 等）：0.5.0 达 46 个，0.6.0 达 65 个（日期 / 日期范围 / 时间 / 时间范围 / 通用 / 农历选择器各三件套，统一「面板 / 弹层 / 输入框」三分形态），0.7.0 达 79 个（数字键盘、密码输入、单选四件套、评分、搜索、分段控制器、列表选择三件套），并配套 69 个纯函数的日期工具集',
     ],
     install: 'npm install @meng-xi/unix-ui',
     installNote:
